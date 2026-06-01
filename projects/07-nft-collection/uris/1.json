@@ -1,0 +1,21 @@
+{
+  "name": "Solidity Portfolio #1",
+  "description": "Segundo NFT de la colección. Continúa la travesía aprendiendo del ecosistema Web3.",
+  "image": "ipfs://REEMPLAZAR_CON_CID_DE_LA_IMAGEN_1",
+  "external_url": "",
+  "attributes": [
+    {
+      "trait_type": "Edition",
+      "value": "Genesis"
+    },
+    {
+      "trait_type": "Rarity",
+      "value": "Uncommon"
+    },
+    {
+      "display_type": "number",
+      "trait_type": "Token ID",
+      "value": 1
+    }
+  ]
+}
