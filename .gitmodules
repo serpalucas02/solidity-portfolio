@@ -1,0 +1,21 @@
+[submodule "projects/05-foundry-calculadora/lib/forge-std"]
+	path = projects/05-foundry-calculadora/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/06-staking-app/lib/forge-std"]
+	path = projects/06-staking-app/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/06-staking-app/lib/openzeppelin-contracts"]
+	path = projects/06-staking-app/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "projects/07-nft-collection/lib/forge-std"]
+	path = projects/07-nft-collection/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/07-nft-collection/lib/openzeppelin-contracts"]
+	path = projects/07-nft-collection/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "projects/08-nft-marketplace/lib/forge-std"]
+	path = projects/08-nft-marketplace/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/08-nft-marketplace/lib/openzeppelin-contracts"]
+	path = projects/08-nft-marketplace/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
