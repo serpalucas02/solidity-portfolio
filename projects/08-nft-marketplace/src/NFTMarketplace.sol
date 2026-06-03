@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.24;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
@@ -41,7 +40,7 @@ contract NFTMarketplace is ReentrancyGuard {
         address nftAddress_,
         uint256 tokenId_,
         uint256 price_
-    ) external nonReentrant {
+    ) external {
         require(price_ > 0, "Price must be greater than zero");
         address owner_ = IERC721(nftAddress_).ownerOf(tokenId_);
         require(owner_ == msg.sender, "Only the owner can list the NFT");
@@ -57,10 +56,7 @@ contract NFTMarketplace is ReentrancyGuard {
     }
 
     // Cancel a listing
-    function cancelListing(
-        address nftAddress_,
-        uint256 tokenId_
-    ) external nonReentrant {
+    function cancelListing(address nftAddress_, uint256 tokenId_) external {
         Listing memory listing_ = listings[nftAddress_][tokenId_];
         require(
             listing_.seller == msg.sender,

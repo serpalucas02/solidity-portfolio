@@ -27,6 +27,7 @@ solidity-portfolio/
 | 05 | [Foundry · Calculadora](projects/05-foundry-calculadora/) | Primer proyecto con Foundry: calculadora con 4 operaciones + 11 tests (unit + fuzz) verificando happy paths, reverts y división por cero. | Solidity 0.8.24, Foundry, forge-std | ✅ Completo |
 | 06 | [Staking App](projects/06-staking-app/) | App de staking con dos contratos: ERC-20 propio + StakingApp que custodia depósitos y paga rewards en ETH. CEI pattern, SafeERC20, 14 tests con cheatcodes (`vm.warp`, `vm.deal`, `vm.prank`). | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
 | 07 | [NFT Collection](projects/07-nft-collection/) | Colección ERC-721 con metadata off-chain en IPFS, mint público con tope de supply, deploy script para Arbitrum. | Solidity 0.8.24, Foundry, OpenZeppelin, IPFS, Arbitrum | ✅ Código completo |
+| 08 | [NFT Marketplace](projects/08-nft-marketplace/) | Marketplace de NFTs sin custodia: listar, cancelar y comprar ERC-721 pagando en ETH. CEI + ReentrancyGuard, approve/safeTransferFrom, 9 tests. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 

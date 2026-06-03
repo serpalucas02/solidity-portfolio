@@ -7,7 +7,10 @@
 - **Lucas** está cursando un curso de **desarrollo de smart contracts en Solidity** y usa este repo como **portfolio personal** de cara a recruiters.
 - **Idioma**: español rioplatense (usa "dale", "vos", "che", "joya", "bárbaro"). Respondé siempre en español salvo que pida lo contrario.
 - **Nivel**: estudiante / en formación. Las explicaciones tienen que ir con el **por qué** del concepto, no solo el qué. Usar analogías simples cuando sea posible.
-- **Entorno**: Windows 10 + VSCode. Shell por defecto = PowerShell, pero también tiene Git Bash instalado.
+- **Entorno**: Lucas **alterna entre dos máquinas** según el día:
+  - 🪟 **Windows 10** + VSCode. Shell por defecto = PowerShell, pero también tiene Git Bash instalado.
+  - 🍎 **macOS** + VSCode. Shell = zsh. Foundry en `~/.foundry/bin/`.
+  - **IMPORTANTE**: antes de aplicar cualquier gotcha o comando dependiente del SO, fijate en qué plataforma estás corriendo (el entorno de la sesión lo indica) y usá la sección que corresponda. Los "Gotchas de Windows + PowerShell" de más abajo **NO aplican en macOS**.
 
 ## Estado del portfolio
 
@@ -21,7 +24,7 @@
 | 05 | Foundry · Calculadora | Primer Foundry — 11 tests (unit + fuzz) | ✅ Cerrado |
 | 06 | Staking App | ERC-20 + Staking con rewards ETH, SafeERC20, 14 tests | ✅ Cerrado |
 | 07 | NFT Collection | ERC-721 con IPFS metadata + deploy script Arbitrum | ✅ Código completo, ⏸ deploy real pendiente |
-| 08 | NFT Marketplace | Marketplace estilo OpenSea simplificado | 🚧 En curso |
+| 08 | NFT Marketplace | Marketplace ERC-721 sin custodia (list/cancel/buy en ETH), CEI + ReentrancyGuard, 9 tests | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
