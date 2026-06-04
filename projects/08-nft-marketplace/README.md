@@ -138,6 +138,7 @@ forge test --gas-report
 - **`assertEq` en vez de `assert`**: `assertEq(a, b)` imprime ambos valores cuando falla; `assert` solo dice "falló". Más fácil de debuggear.
 - **`vm.expectEmit`**: el contrato emite `NFTListed`, `NFTListingCancelled` y `NFTSold`, pero ningún test verifica que se emitan con los argumentos correctos.
 - **Test del caso "comprar sin aprobación"**: hoy el happy path siempre aprueba antes; falta un test que confirme que `buyNFT` revierte si el seller no aprobó.
+- **Test de reentrancy explícito**: un `MaliciousBuyer` (contrato) que en su `onERC721Received` o en su `receive()` payable intente volver a llamar `buyNFT` para el mismo NFT. Hoy el `nonReentrant` + el `delete` previo lo bloquean, pero un test dedicado *demuestra* que la defensa funciona y queda como ejercicio didáctico de cómo se ven los ataques.
 - **Fuzz tests**: variar `price` y `tokenId` para descubrir edge cases.
 
 ### 🛠️ Features
