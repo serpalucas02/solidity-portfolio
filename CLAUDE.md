@@ -25,6 +25,7 @@
 | 06 | Staking App | ERC-20 + Staking con rewards ETH, SafeERC20, 14 tests | ✅ Cerrado |
 | 07 | NFT Collection | ERC-721 con IPFS metadata + deploy script Arbitrum | ✅ Código completo, ⏸ deploy real pendiente |
 | 08 | NFT Marketplace | Marketplace ERC-721 sin custodia (list/cancel/buy en ETH), CEI + ReentrancyGuard, 9 tests | ✅ Cerrado |
+| 09 | Swapping App | Wrapper de Uniswap V2 para swap de tokens, fork testing contra Arbitrum (USDC ↔ DAI) | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 

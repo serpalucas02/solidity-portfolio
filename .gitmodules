@@ -19,3 +19,9 @@
 [submodule "projects/08-nft-marketplace/lib/openzeppelin-contracts"]
 	path = projects/08-nft-marketplace/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "projects/09-swapping-app/lib/forge-std"]
+	path = projects/09-swapping-app/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/09-swapping-app/lib/openzeppelin-contracts"]
+	path = projects/09-swapping-app/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts

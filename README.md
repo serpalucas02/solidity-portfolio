@@ -28,6 +28,7 @@ solidity-portfolio/
 | 06 | [Staking App](projects/06-staking-app/) | App de staking con dos contratos: ERC-20 propio + StakingApp que custodia depósitos y paga rewards en ETH. CEI pattern, SafeERC20, 14 tests con cheatcodes (`vm.warp`, `vm.deal`, `vm.prank`). | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
 | 07 | [NFT Collection](projects/07-nft-collection/) | Colección ERC-721 con metadata off-chain en IPFS, mint público con tope de supply, deploy script para Arbitrum. | Solidity 0.8.24, Foundry, OpenZeppelin, IPFS, Arbitrum | ✅ Código completo |
 | 08 | [NFT Marketplace](projects/08-nft-marketplace/) | Marketplace de NFTs sin custodia: listar, cancelar y comprar ERC-721 pagando en ETH. CEI + ReentrancyGuard, approve/safeTransferFrom, 9 tests. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
+| 09 | [Swapping App](projects/09-swapping-app/) | Wrapper de Uniswap V2 para swappear tokens ERC-20. Primer proyecto integrando con un protocolo DeFi real, testeado con **fork de Arbitrum** contra USDC y DAI reales. | Solidity 0.8.24, Foundry, OpenZeppelin, Uniswap V2 | ✅ Completo |
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 
