@@ -140,7 +140,7 @@ TEST:
 ### 🔒 Hardening
 
 - **`deadline` dinámico en lugar de timestamp hardcodeado**: hoy el test usa `1780616130 + 1 hours` como deadline. Si la fork se hace desde un bloque cuyo timestamp es posterior, el test va a fallar. Más robusto: `block.timestamp + 1 hours`.
-- **`forceApprove` o `safeIncreaseAllowance` en vez de `approve`**: el `approve` regular puede fallar con tokens como USDT, que exigen `approve(0)` antes de `approve(X)` si ya hay allowance. `forceApprove` (de OZ SafeERC20) lo resuelve automáticamente.
+- ~~**`forceApprove` o `safeIncreaseAllowance` en vez de `approve`**~~ ✅ Aplicado en [`SwappingApp.sol:31`](src/SwappingApp.sol#L31): se usa `forceApprove` para cubrir tokens que como USDT exigen `approve(0)` antes de `approve(X)` si ya hay allowance.
 - **`approve(router, 0)` al final del swap**: defensa contra allowance residual (no debería quedar nada con Uniswap, pero por hábito).
 - **Validar `path_.length >= 2`**: el router ya lo valida, pero un revert temprano y con mensaje claro mejora UX.
 - **Custom errors** en vez de relyar en los revert strings del router.

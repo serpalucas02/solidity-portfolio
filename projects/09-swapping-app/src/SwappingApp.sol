@@ -28,7 +28,7 @@ contract SwappingApp {
         uint256 deadline_
     ) external {
         IERC20(path_[0]).safeTransferFrom(msg.sender, address(this), amountIn_);
-        IERC20(path_[0]).approve(V2Router02Address, amountIn_);
+        IERC20(path_[0]).forceApprove(V2Router02Address, amountIn_);
         uint[] memory amountsOut = IV2Router02(V2Router02Address)
             .swapExactTokensForTokens(
                 amountIn_,
