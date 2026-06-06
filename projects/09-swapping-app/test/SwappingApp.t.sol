@@ -23,7 +23,7 @@ contract SwappingAppTest is Test {
     function testSwapTokens() public {
         uint256 amountIn_ = 5 * 1e6; // USDC
         uint256 amountOutMin_ = 4 * 1e18; // DAI
-        uint256 deadline_ = 1780616130 + 1 hours;
+        uint256 deadline_ = block.timestamp + 1 hours;
         address[] memory path_ = new address[](2);
         path_[0] = USDCAddress;
         path_[1] = DAIAddress;
