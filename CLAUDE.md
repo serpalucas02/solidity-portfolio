@@ -26,6 +26,7 @@
 | 07 | NFT Collection | ERC-721 con IPFS metadata + deploy script Arbitrum | ✅ Código completo, ⏸ deploy real pendiente |
 | 08 | NFT Marketplace | Marketplace ERC-721 sin custodia (list/cancel/buy en ETH), CEI + ReentrancyGuard, 9 tests | ✅ Cerrado |
 | 09 | Swapping App | Wrapper de Uniswap V2 para swap de tokens, fork testing contra Arbitrum (USDC ↔ DAI) | ✅ Cerrado |
+| 10 | Liquidity Pools | Extensión del wrapper con add/remove liquidity + combo "swap + add", fork de Arbitrum, 4 tests | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
