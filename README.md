@@ -34,6 +34,13 @@ solidity-portfolio/
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 
+## 📚 Material de estudio
+
+En [`notes/`](notes/) hay material consolidado para preparación de entrevistas:
+
+- **[`CONCEPTOS-CLAVE.md`](notes/CONCEPTOS-CLAVE.md)** — Guía temática con todos los conceptos cubiertos en los 11 proyectos (Solidity, DeFi, Foundry, gotchas).
+- **[`EXAMEN.html`](notes/EXAMEN.html)** — Examen interactivo multiple-choice (65+ preguntas) con feedback inmediato, explicaciones y score. Self-contained, abrí el HTML en cualquier browser.
+
 ## Cómo usar este repositorio
 
 1. Cada proyecto está en `projects/NN-nombre-proyecto/`.
