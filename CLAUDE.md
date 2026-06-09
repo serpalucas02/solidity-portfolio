@@ -29,6 +29,8 @@
 | 10 | Liquidity Pools | Extensión del wrapper con add/remove liquidity + combo "swap + add", fork de Arbitrum, 4 tests | ✅ Cerrado |
 | 11 | Presale | Preventa multi-fase con USDC/DAI/ETH + Chainlink Price Feed, claim pattern, blacklist, emergency withdraws, 24 tests | ✅ Cerrado |
 | 12 | Reentrancy Attack | PoC de seguridad: `SimpleBank` vulnerable (CEI roto) + `Attacker` que lo drena vía reentrancy, 2 tests | ✅ Cerrado |
+| 13 | ABI Encoding & Decoding | Codificación/hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data): `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`, 18 tests | ✅ Cerrado |
+| 14 | Yield Farming | Staking con rewards (patrón `accRewardPerShare` + `rewardDebt`), mock tokens ERC-20, create pool / stake / unstake / claim. Trae `ABIEncoder.sol` del módulo 13 como base | 🚧 En curso |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 

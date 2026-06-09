@@ -40,3 +40,12 @@
 [submodule "projects/12-reentrancy-attack/lib/forge-std"]
 	path = projects/12-reentrancy-attack/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/13-abi-encoding/lib/forge-std"]
+	path = projects/13-abi-encoding/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/14-yield-farming/lib/forge-std"]
+	path = projects/14-yield-farming/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/14-yield-farming/lib/openzeppelin-contracts"]
+	path = projects/14-yield-farming/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
