@@ -31,6 +31,7 @@ solidity-portfolio/
 | 09 | [Swapping App](projects/09-swapping-app/) | Wrapper de Uniswap V2 para swappear tokens ERC-20. Primer proyecto integrando con un protocolo DeFi real, testeado con **fork de Arbitrum** contra USDC y DAI reales. | Solidity 0.8.24, Foundry, OpenZeppelin, Uniswap V2 | ✅ Completo |
 | 10 | [Liquidity Pools](projects/10-liquidity-pools/) | Extensión del wrapper de Uniswap V2 con **add / remove liquidity** y un combo atómico "swap + add". Fork de Arbitrum contra los pools reales de USDC/DAI. | Solidity 0.8.24, Foundry, OpenZeppelin, Uniswap V2 | ✅ Completo |
 | 11 | [Presale](projects/11-presale/) | Preventa multi-fase con pago en USDC / DAI / ETH, integración con **Chainlink Price Feed** (ETH/USD), claim pattern, blacklist y emergency withdraws. Fork de Arbitrum, 24 tests. | Solidity 0.8.24, Foundry, OpenZeppelin, Chainlink | ✅ Completo |
+| 12 | [Reentrancy Attack](projects/12-reentrancy-attack/) | Laboratorio de seguridad: un `SimpleBank` vulnerable por **CEI roto** y un `Attacker` que lo drena por completo vía reentrancy. Test que demuestra el robo de fondos ajenos + el fix (CEI / ReentrancyGuard). | Solidity 0.8.24, Foundry | ✅ Completo |
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 

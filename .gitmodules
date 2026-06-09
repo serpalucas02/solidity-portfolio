@@ -37,3 +37,6 @@
 [submodule "projects/11-presale/lib/openzeppelin-contracts"]
 	path = projects/11-presale/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "projects/12-reentrancy-attack/lib/forge-std"]
+	path = projects/12-reentrancy-attack/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
