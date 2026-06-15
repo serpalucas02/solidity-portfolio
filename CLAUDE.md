@@ -31,6 +31,7 @@
 | 12 | Reentrancy Attack | PoC de seguridad: `SimpleBank` vulnerable (CEI roto) + `Attacker` que lo drena vía reentrancy, 2 tests | ✅ Cerrado |
 | 13 | ABI Encoding & Decoding | Codificación/hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data): `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`, 18 tests | ✅ Cerrado |
 | 14 | Yield Farming | Staking con rewards (patrón `rewardPerToken` + `rewardDebt`), mock tokens ERC-20, create pool / stake / withdraw / claim. 24 tests, 100% coverage | ✅ Cerrado |
+| 15 | DAO / Governance | Gobernanza on-chain con OpenZeppelin: `ERC20Votes` + `Governor` + `TimelockController`. Ciclo propose → vote → queue → execute | 🚧 En curso |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
@@ -145,6 +146,8 @@ Para patrones "production-quality" que vale la pena internalizar desde el princi
 - CEI estricto siempre.
 
 ## Pendientes
+
+- **Testing del DAO (proyecto 15)**: los contratos (`DAO.sol`, `DAOGovernanceToken.sol`, `DAOTreasury.sol` + `IDAOTreasury`) están escritos y **compilan**, pero falta toda la suite de tests (`test/` está vacío). Es una implementación de governance **hecha a mano** (no usa el `Governor` de OZ), con ciclo createProposal → vote → execute/cancel y un treasury aparte. Al testear, ojo con: el **flujo temporal** (`vm.warp` para pasar el `votingPeriod`), el **voting power** del `DAOGovernanceToken` (si está sobre `ERC20Votes`, recordar **delegar** antes de que cuenten los votos), y cubrir los reverts (quórum, doble voto, cancel por proposer/owner). El scaffold ya tiene OZ + forge-std instalados.
 
 - **Deploy real de la NFT Collection (proyecto 07) a Arbitrum Sepolia**: el código está completo y compilado, falta ejecutar el deploy en una red real. Lucas no tenía ETH en wallet al cerrar el módulo y las faucets pedían balance mínimo. Pasos cuando consiga test ETH:
   1. Subir las imágenes y los JSONs (`uris/0.json`, `uris/1.json`) a IPFS (Pinata, NFT.Storage).
