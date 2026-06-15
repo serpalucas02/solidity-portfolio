@@ -33,6 +33,7 @@ solidity-portfolio/
 | 11 | [Presale](projects/11-presale/) | Preventa multi-fase con pago en USDC / DAI / ETH, integración con **Chainlink Price Feed** (ETH/USD), claim pattern, blacklist y emergency withdraws. Fork de Arbitrum, 24 tests. | Solidity 0.8.24, Foundry, OpenZeppelin, Chainlink | ✅ Completo |
 | 12 | [Reentrancy Attack](projects/12-reentrancy-attack/) | Laboratorio de seguridad: un `SimpleBank` vulnerable por **CEI roto** y un `Attacker` que lo drena por completo vía reentrancy. Test que demuestra el robo de fondos ajenos + el fix (CEI / ReentrancyGuard). | Solidity 0.8.24, Foundry | ✅ Completo |
 | 13 | [ABI Encoding](projects/13-abi-encoding/) | Codificación y hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data). `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`. 18 tests. | Solidity 0.8.24, Foundry | ✅ Completo |
+| 14 | [Yield Farming](projects/14-yield-farming/) | Staking con rewards en token separado, patrón **`rewardPerToken` + `rewardDebt`** (estilo MasterChef / Synthetix): create pool, stake, withdraw, claim. Reparto proporcional al stake y al tiempo. 24 tests, 100% coverage. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 
