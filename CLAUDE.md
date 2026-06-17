@@ -32,6 +32,7 @@
 | 13 | ABI Encoding & Decoding | Codificación/hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data): `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`, 18 tests | ✅ Cerrado |
 | 14 | Yield Farming | Staking con rewards (patrón `rewardPerToken` + `rewardDebt`), mock tokens ERC-20, create pool / stake / withdraw / claim. 24 tests, 100% coverage | ✅ Cerrado |
 | 15 | DAO / Governance | Gobernanza on-chain **hecha a mano** (NO usa el `Governor` de OZ): `DAO` + `DAOGovernanceToken` (ERC20 común, voting power = `balanceOf`) + `DAOTreasury` separado. Ciclo createProposal → vote → execute/cancel. 83 tests, 100% líneas/statements/funcs, 97.4% branches | ✅ Cerrado |
+| 16 | Lending & Borrowing | Protocolo de préstamos con colateral estilo Aave/Compound: deposit/borrow/repay/withdraw + liquidación, oráculo de precios Chainlink (`IAggregator`). forge-std + OZ + interfaz de price feed lista | 🚧 En curso |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
@@ -80,6 +81,14 @@ La tabla en el [README raíz](README.md) es la fuente de verdad para los proyect
 - **Contratos**: `PascalCase` (ej. `Calculadora`, `CryptoBank`, `NFTCollection`).
 - **Archivo `.sol`**: matchea el nombre del contrato principal (ej. `CryptoBank.sol` para `contract CryptoBank`).
 - **Parámetros y locales que pueden chocar con state vars**: sufijo guión bajo. Ej. `function deposit(uint256 amount_) ... { balance += amount_; }`. Esta es **convención del curso**, no del Solidity Style Guide oficial — pero la mantenemos para consistencia.
+
+### NatSpec (desde el proyecto 16 en adelante)
+
+- **Documentar con NatSpec en inglés.** Pedido explícito de Lucas.
+- **Estilo: breve, natural, profesional — que lea como escrito por una persona, NO autogenerado.** Sin relleno ni repetir lo obvio (evitar cosas como `@param amount The amount`). Decir lo que aporta, nada más.
+- **Formato del curso (estilo del profesor)**: comentarios en **bloque `/** ... */`** (NO `///`). El **contrato** lleva `@title` + `@author <nombre de Lucas>` + `@dev` con una lista de bullets de lo que hace el protocolo. Ejemplo de header del profe (`@title Lending Protocol` / `@author Jose Cruz` / `@dev ... - Deposit ... - Borrow ...`).
+- **Funciones**: `@notice` de una línea (qué hace, óptica del usuario); `@param`/`@return` **solo** cuando agregan info más allá del nombre; `@dev` para lo no obvio (invariantes, checks, side-effects). Eventos / custom errors con `@notice` cuando valga la pena. (Lucas va a pasar un ejemplo de función del profe para clavar el estilo exacto a nivel función.)
+- Los contratos los escribe Lucas, pero **la NatSpec la puedo agregar yo** (es parte de documentar/cerrar). Confirmar el tono con él si hay dudas.
 
 ### Estructura por herramienta
 
@@ -132,7 +141,6 @@ Para código **didáctico del curso** (foco en demostrar un concepto, no caso re
 - Falta de access control en mocks/faucets.
 - `require` con strings en lugar de custom errors.
 - Falta de `indexed` en eventos.
-- Falta de NatSpec.
 - CEI roto pero sin riesgo concreto en el contexto.
 
 Si Lucas levanta el flag y decide arreglarlo, dale. Si no, dejar pasar.
