@@ -31,7 +31,7 @@
 | 12 | Reentrancy Attack | PoC de seguridad: `SimpleBank` vulnerable (CEI roto) + `Attacker` que lo drena vía reentrancy, 2 tests | ✅ Cerrado |
 | 13 | ABI Encoding & Decoding | Codificación/hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data): `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`, 18 tests | ✅ Cerrado |
 | 14 | Yield Farming | Staking con rewards (patrón `rewardPerToken` + `rewardDebt`), mock tokens ERC-20, create pool / stake / withdraw / claim. 24 tests, 100% coverage | ✅ Cerrado |
-| 15 | DAO / Governance | Gobernanza on-chain con OpenZeppelin: `ERC20Votes` + `Governor` + `TimelockController`. Ciclo propose → vote → queue → execute | 🚧 En curso |
+| 15 | DAO / Governance | Gobernanza on-chain **hecha a mano** (NO usa el `Governor` de OZ): `DAO` + `DAOGovernanceToken` (ERC20 común, voting power = `balanceOf`) + `DAOTreasury` separado. Ciclo createProposal → vote → execute/cancel. 83 tests, 100% líneas/statements/funcs, 97.4% branches | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
@@ -42,7 +42,8 @@ La tabla en el [README raíz](README.md) es la fuente de verdad para los proyect
 1. **Arranque de proyecto nuevo**: cuando Lucas anuncia un módulo nuevo, Claude crea la base:
    - Para proyectos Remix (01-04): copiar `00-template/` a `projects/NN-nombre/`, contrato vacío con secciones comentadas, README esqueleto.
    - Para proyectos Foundry (05+): `forge init projects/NN-nombre --use-parent-git --empty`, configurar `foundry.toml` con la convención del curso, generar `remappings.txt`, eliminar el `.github/` que viene por default, escribir un README con checklist del módulo.
-2. **Desarrollo**: Lucas escribe el código siguiendo el curso. **Claude NO toca el código** salvo que Lucas lo autorice explícitamente para un cambio puntual.
+2. **Desarrollo**: Lucas escribe **los contratos** (`src/`) siguiendo el curso. **Claude NO toca los contratos** salvo que Lucas lo autorice explícitamente para un cambio puntual.
+   - **Tests delegados a Claude** (desde el proyecto 15, jun-2026): Lucas pidió que **Claude escriba las suites de tests** (`test/`) — no los hace a mano. Claude los escribe profesionales/legibles **y le explica cada uno** (Lucas necesita entenderlos para entrevistas técnicas). Apuntar a cubrir happy paths + todos los reverts alcanzables; correr `forge coverage` y explicar las branches inalcanzables en vez de inflar el número.
 3. **Revisión iterativa**: cuando Lucas pide revisión, Claude:
    - Identifica conceptos a reforzar y los explica con analogías sencillas.
    - Marca bugs funcionales y de seguridad (ver "Cuándo flag y cuándo no" abajo).
@@ -146,8 +147,6 @@ Para patrones "production-quality" que vale la pena internalizar desde el princi
 - CEI estricto siempre.
 
 ## Pendientes
-
-- **Testing del DAO (proyecto 15)**: los contratos (`DAO.sol`, `DAOGovernanceToken.sol`, `DAOTreasury.sol` + `IDAOTreasury`) están escritos y **compilan**, pero falta toda la suite de tests (`test/` está vacío). Es una implementación de governance **hecha a mano** (no usa el `Governor` de OZ), con ciclo createProposal → vote → execute/cancel y un treasury aparte. Al testear, ojo con: el **flujo temporal** (`vm.warp` para pasar el `votingPeriod`), el **voting power** del `DAOGovernanceToken` (si está sobre `ERC20Votes`, recordar **delegar** antes de que cuenten los votos), y cubrir los reverts (quórum, doble voto, cancel por proposer/owner). El scaffold ya tiene OZ + forge-std instalados.
 
 - **Deploy real de la NFT Collection (proyecto 07) a Arbitrum Sepolia**: el código está completo y compilado, falta ejecutar el deploy en una red real. Lucas no tenía ETH en wallet al cerrar el módulo y las faucets pedían balance mínimo. Pasos cuando consiga test ETH:
   1. Subir las imágenes y los JSONs (`uris/0.json`, `uris/1.json`) a IPFS (Pinata, NFT.Storage).
