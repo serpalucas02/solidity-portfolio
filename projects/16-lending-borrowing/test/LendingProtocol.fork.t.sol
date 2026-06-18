@@ -8,7 +8,8 @@ import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 /**
  * @dev Fork test contra Arbitrum One. Usa tokens y price feeds REALES de
  *      Chainlink, asi nos ahorramos mockear precios y decimales.
- *      Correr con:  forge test --fork-url <ARBITRUM_RPC> --match-path test/LendingProtocol.fork.t.sol
+ *      Se auto-forkea en el setUp (no hace falta pasar --fork-url): usa la env
+ *      var ARBITRUM_RPC si está, si no cae a un RPC público de Arbitrum.
  */
 contract LendingProtocolForkTest is Test {
     LendingProtocol internal lending;
@@ -37,6 +38,11 @@ contract LendingProtocolForkTest is Test {
     address internal borrower = makeAddr("borrower"); // deposita WETH, pide USDC
 
     function setUp() public {
+        // Auto-fork de Arbitrum One: así `forge test` corre sin --fork-url.
+        vm.createSelectFork(
+            vm.envOr("ARBITRUM_RPC", string("https://arb1.arbitrum.io/rpc"))
+        );
+
         lending = new LendingProtocol(); // el test es el owner
 
         lending.addMarket(WETH, CF_WETH, SUPPLY_RATE, BORROW_RATE);

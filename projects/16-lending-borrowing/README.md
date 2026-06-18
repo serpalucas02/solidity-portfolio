@@ -47,11 +47,14 @@ El proceso de testing (sobre todo el **fork con precios reales**) destapó dos v
 # Compilar
 forge build
 
-# Suite con mocks (rápida, determinística)
+# Toda la suite (la de fork se auto-forkea contra Arbitrum)
+forge test
+
+# Solo la suite con mocks (rápida, sin red)
 forge test --match-path test/LendingProtocol.t.sol
 
-# Suite de fork contra Arbitrum (requiere RPC)
-forge test --fork-url <ARBITRUM_RPC> --match-path test/LendingProtocol.fork.t.sol
+# El fork usa un RPC público por default; para uno propio:
+ARBITRUM_RPC=<tu_rpc> forge test --match-path test/LendingProtocol.fork.t.sol
 
 # Cobertura
 forge coverage --match-path test/LendingProtocol.t.sol

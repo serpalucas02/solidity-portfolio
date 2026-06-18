@@ -11,6 +11,17 @@ import "openzeppelin-contracts/contracts/utils/cryptography/MessageHashUtils.sol
 import "openzeppelin-contracts/contracts/token/ERC20/extensions/IERC20Metadata.sol";
 import "./interfaces/IAggregator.sol";
 
+/**
+ * @title LendingProtocol
+ * @author Lucas Serpa
+ * @dev Collateralized lending protocol in the style of Aave / Compound:
+ *      - Deposit a token as collateral and borrow another against it
+ *      - Collateral and debt are valued in USD via Chainlink price feeds,
+ *        normalizing each token's decimals to a common 18-decimal scale
+ *      - Positions become liquidatable when their collateral ratio drops
+ *        below the liquidation threshold
+ *      - Supports gasless deposits authorized by off-chain ECDSA signatures
+ */
 contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
     using SafeERC20 for IERC20;
     using ECDSA for bytes32;
@@ -110,6 +121,15 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
 
     constructor() Ownable(msg.sender) {}
 
+    /**
+     * @notice List a new token as a lending/borrowing market
+     * @dev Reverts if the market already exists. Each market still needs a price
+     *      feed set via setPriceFeed before borrows/withdrawals can be valued.
+     * @param token_ The ERC20 token to list
+     * @param collateralFactor_ Borrowable fraction of this collateral, in basis points (0-10000)
+     * @param supplyRate_ Initial supply interest rate, in basis points
+     * @param borrowRate_ Initial borrow interest rate, in basis points
+     */
     function addMarket(
         address token_,
         uint256 collateralFactor_,
@@ -151,6 +171,13 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit MarketAdded(token_, collateralFactor_);
     }
 
+    /**
+     * @notice Update an existing market's collateral factor and interest rates
+     * @param token_ The market token
+     * @param collateralFactor_ New collateral factor, in basis points (0-10000)
+     * @param supplyRate_ New supply interest rate, in basis points
+     * @param borrowRate_ New borrow interest rate, in basis points
+     */
     function updateMarket(
         address token_,
         uint256 collateralFactor_,
@@ -194,6 +221,12 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit PriceFeedSet(token_, priceFeed_);
     }
 
+    /**
+     * @notice Deposit tokens into a market, as collateral or as lending liquidity
+     * @dev Pulls the tokens via transferFrom, so the caller must approve first.
+     * @param token_ The market token to deposit
+     * @param amount_ Amount to deposit, in the token's own decimals
+     */
     function deposit(
         address token_,
         uint256 amount_
@@ -216,6 +249,13 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Deposited(msg.sender, token_, amount_);
     }
 
+    /**
+     * @notice Withdraw deposited tokens, as long as the position stays healthy
+     * @dev Reverts if the withdrawal would push the collateral ratio below the
+     *      liquidation threshold (checked via canWithdraw).
+     * @param token_ The market token to withdraw
+     * @param amount_ Amount to withdraw, in the token's own decimals
+     */
     function withdraw(
         address token_,
         uint256 amount_
@@ -246,6 +286,13 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Withdrawn(msg.sender, token_, amount_);
     }
 
+    /**
+     * @notice Borrow tokens from a market against your deposited collateral
+     * @dev Reverts if there isn't enough market liquidity or if the resulting
+     *      position would be undercollateralized (checked via canBorrow).
+     * @param token_ The market token to borrow
+     * @param amount_ Amount to borrow, in the token's own decimals
+     */
     function borrow(
         address token_,
         uint256 amount_
@@ -272,6 +319,12 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Borrowed(msg.sender, token_, amount_);
     }
 
+    /**
+     * @notice Repay borrowed tokens, fully or partially
+     * @dev Pulls the repaid amount via transferFrom, so the caller must approve first.
+     * @param token_ The market token to repay
+     * @param amount_ Amount to repay, in the token's own decimals
+     */
     function repay(
         address token_,
         uint256 amount_
@@ -346,6 +399,16 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Deposited(msg.sender, token_, amount_);
     }
 
+    /**
+     * @notice Liquidate an unhealthy position: repay part of its debt and seize collateral
+     * @dev Only succeeds if the borrower is below the liquidation threshold. The seized
+     *      collateral equals the repaid debt value plus the liquidation penalty,
+     *      converted into units of the borrower's most valuable collateral at the
+     *      current price. The repaid amount is pulled from the liquidator via transferFrom.
+     * @param user_ The borrower being liquidated
+     * @param token_ The debt token being repaid
+     * @param amount_ Amount of debt to repay, in the token's own decimals
+     */
     function liquidate(
         address user_,
         address token_,
@@ -398,10 +461,16 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         emit Liquidated(msg.sender, user_, token_, amount_);
     }
 
+    /**
+     * @notice Pause deposits, withdrawals, borrows, repays and liquidations
+     */
     function pause() external onlyOwner {
         _pause();
     }
 
+    /**
+     * @notice Resume operations after a pause
+     */
     function unpause() external onlyOwner {
         _unpause();
     }
@@ -478,6 +547,14 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         return supportedTokens;
     }
 
+    /**
+     * @notice Whether `user_` could withdraw `amount_` of `token_` and stay healthy
+     * @dev Simulates the withdrawal and compares the resulting ratio against the threshold.
+     * @param user_ The user withdrawing
+     * @param token_ The market token to withdraw
+     * @param amount_ Amount to withdraw, in the token's own decimals
+     * @return True if the position would remain at or above the liquidation threshold
+     */
     function canWithdraw(
         address user_,
         address token_,
@@ -520,6 +597,14 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         return newRatio >= LIQUIDATION_THRESHOLD;
     }
 
+    /**
+     * @notice Whether `user_` could borrow `amount_` of `token_` and stay healthy
+     * @dev Simulates the new debt and compares the resulting ratio against the threshold.
+     * @param user_ The user borrowing
+     * @param token_ The market token to borrow
+     * @param amount_ Amount to borrow, in the token's own decimals
+     * @return True if the position would remain at or above the liquidation threshold
+     */
     function canBorrow(
         address user_,
         address token_,
@@ -557,6 +642,13 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         return newRatio >= LIQUIDATION_THRESHOLD;
     }
 
+    /**
+     * @notice Current collateral ratio of a user, in basis points
+     * @dev (collateral value × 10000) / debt value, both in USD. Returns
+     *      type(uint256).max when the user has no debt.
+     * @param user_ The user to check
+     * @return The collateral ratio in basis points (or max if there is no debt)
+     */
     function getCollateralRatio(address user_) public view returns (uint256) {
         uint256 totalCollateralValue = 0;
         uint256 totalBorrowValue = 0;
@@ -584,6 +676,11 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
         return (totalCollateralValue * BASIS_POINT) / totalBorrowValue;
     }
 
+    /**
+     * @notice Whether a user's position can be liquidated
+     * @param user_ The user to check
+     * @return True if the collateral ratio is below the liquidation threshold
+     */
     function isLiquidatable(address user_) public view returns (bool) {
         uint256 collateralRatio = getCollateralRatio(user_);
         return collateralRatio < LIQUIDATION_THRESHOLD;
@@ -634,6 +731,10 @@ contract LendingProtocol is ReentrancyGuard, Pausable, Ownable {
             (price * 1e18);
     }
 
+    /**
+     * @dev Returns the user's deposited token with the highest USD value — the
+     *      most efficient collateral to seize in a liquidation. Zero address if none.
+     */
     function findBestCollateral(address user_) internal view returns (address) {
         address bestToken = address(0);
         uint256 bestValue = 0;
