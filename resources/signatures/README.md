@@ -82,7 +82,52 @@ Esa librería **ya hace por vos**:
 
 O sea, te cubre los puntos 1 y 3 automáticamente. **El replay (punto 2) sí lo tenés que manejar vos** con nonce / deadline / contexto — la librería no sabe de tu lógica de negocio.
 
-> Y para mensajes estructurados, sumá **EIP-712** (`toTypedDataHash`): firmas legibles en la wallet y dominio (nombre, versión, chainId, contrato) atado, que mata el cross-contract replay de raíz.
+### Cómo se ve end-to-end (el patrón completo)
+
+```solidity
+import {ECDSA} from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import {MessageHashUtils} from "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+
+contract Example {
+    using ECDSA for bytes32;
+    using MessageHashUtils for bytes32;
+
+    mapping(address => uint256) public nonces;
+
+    function doWithSignature(
+        address user_,
+        uint256 amount_,
+        uint256 deadline_,
+        bytes calldata signature_
+    ) external {
+        require(block.timestamp <= deadline_, "expired");            // anti-replay (tiempo)
+
+        // 1. Reconstruís el MISMO hash que se firmó off-chain.
+        //    Metés nonce + deadline + address(this) + chainid para
+        //    que la firma sirva una sola vez, acá y en esta red.
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                user_, amount_, nonces[user_], deadline_, address(this), block.chainid
+            )
+        );
+
+        // 2. Recuperás el firmante. ECDSA revierte solo si la firma es
+        //    inválida o maleable (no hace falta chequear address(0)).
+        address signer = hash.toEthSignedMessageHash().recover(signature_);
+
+        // 3. Validás que sea quien esperabas.
+        require(signer == user_, "bad signer");
+
+        nonces[user_]++;                                             // anti-replay (nonce)
+
+        // ... tu lógica autorizada acá ...
+    }
+}
+```
+
+Los 3 pasos siempre son los mismos: **reconstruir el hash → recuperar el firmante con `ECDSA` → comparar contra quién esperabas.** La librería te tapa el `address(0)` y la malleability; vos ponés el hash (con nonce/deadline/contexto) y la comparación final.
+
+> Y para mensajes estructurados, sumá **EIP-712** (`toTypedDataHash` en vez de `toEthSignedMessageHash`): firmas **legibles en la wallet** (MetaMask te muestra los campos en vez de un hash) y dominio (nombre, versión, chainId, contrato) atado, que mata el cross-contract replay de raíz.
 
 ---
 
