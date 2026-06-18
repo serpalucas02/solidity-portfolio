@@ -32,7 +32,7 @@
 | 13 | ABI Encoding & Decoding | Codificación/hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data): `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`, 18 tests | ✅ Cerrado |
 | 14 | Yield Farming | Staking con rewards (patrón `rewardPerToken` + `rewardDebt`), mock tokens ERC-20, create pool / stake / withdraw / claim. 24 tests, 100% coverage | ✅ Cerrado |
 | 15 | DAO / Governance | Gobernanza on-chain **hecha a mano** (NO usa el `Governor` de OZ): `DAO` + `DAOGovernanceToken` (ERC20 común, voting power = `balanceOf`) + `DAOTreasury` separado. Ciclo createProposal → vote → execute/cancel. 83 tests, 100% líneas/statements/funcs, 97.4% branches | ✅ Cerrado |
-| 16 | Lending & Borrowing | Protocolo de préstamos con colateral estilo Aave/Compound: deposit/borrow/repay/withdraw + liquidación, oráculo de precios Chainlink (`IAggregator`). forge-std + OZ + interfaz de price feed lista | 🚧 En curso |
+| 16 | Lending & Borrowing | Protocolo de préstamos con colateral estilo Aave/Compound: deposit/borrow/repay/withdraw + liquidación, valuado en USD con oráculo Chainlink (`IAggregator`) + normalización de decimales, depósito con firma off-chain (ECDSA). 2 bugs de seguridad corregidos (`canBorrow`, `liquidate`). 39 tests (mocks + fork Arbitrum), 100% líneas/funcs | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 
@@ -82,12 +82,24 @@ La tabla en el [README raíz](README.md) es la fuente de verdad para los proyect
 - **Archivo `.sol`**: matchea el nombre del contrato principal (ej. `CryptoBank.sol` para `contract CryptoBank`).
 - **Parámetros y locales que pueden chocar con state vars**: sufijo guión bajo. Ej. `function deposit(uint256 amount_) ... { balance += amount_; }`. Esta es **convención del curso**, no del Solidity Style Guide oficial — pero la mantenemos para consistencia.
 
+### Nada de "magic numbers" — constantes/variables con nombre (pedido de Lucas, jun-2026)
+
+- **No hardcodear valores sueltos** en tests ni contratos. Declarar una constante/variable con un nombre que diga **qué es** ese valor y reusarla donde haga falta. Razón: se lee de un vistazo qué se le pasa a cada función / qué cuenta se está haciendo, y si hay que cambiar el valor se toca **en un solo lugar**.
+- En **tests**: declarar al inicio del contrato de test (ej. `uint256 constant DEPOSIT_AMOUNT = 10 ether;`, `int256 constant ETH_PRICE = 2000e8;`, `uint256 constant CF_WETH = 8000;`) y usarlas en `setUp` y en los tests, en vez de repetir el literal.
+- En **contratos**: la misma idea, y ahí es **aún más importante** — los valores fijos van como `constant` / `immutable` con nombre (el `LendingProtocol` ya lo hace bien: `BASIS_POINT`, `LIQUIDATION_THRESHOLD`, `LIQUIDATION_PENALTY`, `PRICE_FEED_DECIMALS`). Además de claridad, ahorra gas y deja el número documentado.
+- **Excepción razonable**: valores triviales y obvios en contexto (`0`, `1`) o asserts puntuales donde el número *es* el dato. No forzar al absurdo.
+
 ### NatSpec (desde el proyecto 16 en adelante)
 
 - **Documentar con NatSpec en inglés.** Pedido explícito de Lucas.
 - **Estilo: breve, natural, profesional — que lea como escrito por una persona, NO autogenerado.** Sin relleno ni repetir lo obvio (evitar cosas como `@param amount The amount`). Decir lo que aporta, nada más.
 - **Formato del curso (estilo del profesor)**: comentarios en **bloque `/** ... */`** (NO `///`). El **contrato** lleva `@title` + `@author <nombre de Lucas>` + `@dev` con una lista de bullets de lo que hace el protocolo. Ejemplo de header del profe (`@title Lending Protocol` / `@author Jose Cruz` / `@dev ... - Deposit ... - Borrow ...`).
-- **Funciones**: `@notice` de una línea (qué hace, óptica del usuario); `@param`/`@return` **solo** cuando agregan info más allá del nombre; `@dev` para lo no obvio (invariantes, checks, side-effects). Eventos / custom errors con `@notice` cuando valga la pena. (Lucas va a pasar un ejemplo de función del profe para clavar el estilo exacto a nivel función.)
+- **Funciones**: bloque `/** */`. El profe tira todo a `@dev`, pero **acordamos con Lucas (jun-2026) seguir la convención canónica** de NatSpec:
+  - **`external` / `public`** → **`@notice`** con la descripción de cara al usuario (qué hace; es lo que muestran wallets / Etherscan), **+ `@dev`** adicional solo para lo no obvio (invariantes, checks de seguridad, CEI, cálculos como health factor, side-effects).
+  - **`internal` / `private`** → `@dev` (no son de cara al usuario).
+  - **Un `@param` por CADA parámetro** (estilo profe — los documenta todos, no selectivamente); la descripción debe aportar **unidad / rango / contexto** (`(0-10000)`, `in basis points`), no solo repetir el nombre. `@return` cuando la función retorna algo.
+  - **`@param`/`@return` matchean el nombre REAL del parámetro**, así que con la convención de sufijo del curso van con guión bajo (`@param token_`, no `@param token`).
+  - Eventos / custom errors con descripción breve cuando valga la pena.
 - Los contratos los escribe Lucas, pero **la NatSpec la puedo agregar yo** (es parte de documentar/cerrar). Confirmar el tono con él si hay dudas.
 
 ### Estructura por herramienta
@@ -133,6 +145,7 @@ NN-nombre/
 - Events declarados pero no emitidos.
 - Tests que pasan por casualidad (ej. fuzz tests sin asserts).
 - Inconsistencias contrato vs test (ej. contrato devuelve 0 pero test espera revert).
+- **Vulnerabilidades de seguridad / lógica explotable** (pedido explícito de Lucas, jun-2026): en CADA revisión, chequear activamente que no haya forma de drenar fondos o quedar descubiertos — checks que se pueden bypassear, early-returns que saltean validaciones (ej. el `if (ratio == max) return true` en `canBorrow` del proyecto 16 dejaba pedir el primer préstamo sin colateral), reentrancy, falta de validación de colateral/salud antes de mover value. Pensar siempre "¿cómo lo rompo?" y escribir un test que lo demuestre.
 
 ### Flag UNA vez en "Posibles mejoras", sin insistir
 

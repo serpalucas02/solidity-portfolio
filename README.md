@@ -35,6 +35,7 @@ solidity-portfolio/
 | 13 | [ABI Encoding](projects/13-abi-encoding/) | Codificación y hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data). `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`. 18 tests. | Solidity 0.8.24, Foundry | ✅ Completo |
 | 14 | [Yield Farming](projects/14-yield-farming/) | Staking con rewards en token separado, patrón **`rewardPerToken` + `rewardDebt`** (estilo MasterChef / Synthetix): create pool, stake, withdraw, claim. Reparto proporcional al stake y al tiempo. 24 tests, 100% coverage. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
 | 15 | [DAO / Governance](projects/15-dao/) | Gobernanza on-chain hecha a mano: token de voto, `DAO` (propose → vote → execute/cancel, quórum + mayoría) y `DAOTreasury` separado. Voting power = `balanceOf`, separación lógica/fondos. 83 tests, 100% líneas. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
+| 16 | [Lending & Borrowing](projects/16-lending-borrowing/) | Protocolo de préstamos con colateral estilo Aave/Compound: deposit / borrow / repay / withdraw + liquidación, valuado en USD con **oráculo Chainlink** (normalización de decimales). Depósito con firma off-chain (ECDSA). 2 bugs de seguridad encontrados y corregidos. 39 tests (mocks + fork de Arbitrum), 100% líneas. | Solidity 0.8.24, Foundry, OpenZeppelin, Chainlink | ✅ Completo |
 
 > A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
 
