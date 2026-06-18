@@ -46,6 +46,10 @@ En [`notes/`](notes/) hay material consolidado para preparación de entrevistas:
 - **[`CONCEPTOS-CLAVE.md`](notes/CONCEPTOS-CLAVE.md)** — Guía temática con todos los conceptos cubiertos en los 11 proyectos (Solidity, DeFi, Foundry, gotchas).
 - **[`EXAMEN.html`](notes/EXAMEN.html)** — Examen interactivo multiple-choice (65+ preguntas) con feedback inmediato, explicaciones y score. Self-contained, abrí el HTML en cualquier browser.
 
+En [`resources/`](resources/) hay material de referencia para consultar al construir:
+
+- **[`oracles/`](resources/oracles/)** — Cheat-sheet de seguridad de oráculos (Chainlink & Pyth): qué validar al leer un precio (staleness, confidence interval), modelo push vs pull y checklist por integración.
+
 ## Cómo usar este repositorio
 
 1. Cada proyecto está en `projects/NN-nombre-proyecto/`.
