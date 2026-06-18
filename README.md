@@ -49,6 +49,7 @@ En [`notes/`](notes/) hay material consolidado para preparación de entrevistas:
 En [`resources/`](resources/) hay material de referencia para consultar al construir:
 
 - **[`oracles/`](resources/oracles/)** — Cheat-sheet de seguridad de oráculos (Chainlink & Pyth): qué validar al leer un precio (staleness, confidence interval), modelo push vs pull y checklist por integración.
+- **[`signatures/`](resources/signatures/)** — Cheat-sheet de seguridad de firmas off-chain: los 3 ataques clásicos (`ecrecover` → `address(0)`, replay, signature malleability) y cómo blindarlos con `ECDSA` + nonce/deadline.
 
 ## Cómo usar este repositorio
 
