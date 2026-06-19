@@ -50,6 +50,7 @@ En [`resources/`](resources/) hay material de referencia para consultar al const
 
 - **[`oracles/`](resources/oracles/)** — Cheat-sheet de seguridad de oráculos (Chainlink & Pyth): qué validar al leer un precio (staleness, confidence interval), modelo push vs pull y checklist por integración.
 - **[`signatures/`](resources/signatures/)** — Cheat-sheet de seguridad de firmas off-chain: los 3 ataques clásicos (`ecrecover` → `address(0)`, replay, signature malleability) y cómo blindarlos con `ECDSA` + nonce/deadline.
+- **[`upgradeability/`](resources/upgradeability/)** — Patrones de contratos actualizables (Transparent, UUPS, Beacon + mención de Diamond) **implementados y testeados** con OZ Upgradeable: proxy + `delegatecall`, gotchas de seguridad (initializer, storage layout) y cuándo usar cada uno. 9 tests.
 
 ## Cómo usar este repositorio
 
