@@ -1,0 +1,18 @@
+{
+  "name": "mint-dapp-wagmi",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "next": "^14.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "wagmi": "^2.12.7",
+    "viem": "^2.21.1",
+    "@tanstack/react-query": "^5.51.23"
+  }
+}

@@ -33,6 +33,7 @@
 | 14 | Yield Farming | Staking con rewards (patrón `rewardPerToken` + `rewardDebt`), mock tokens ERC-20, create pool / stake / withdraw / claim. 24 tests, 100% coverage | ✅ Cerrado |
 | 15 | DAO / Governance | Gobernanza on-chain **hecha a mano** (NO usa el `Governor` de OZ): `DAO` + `DAOGovernanceToken` (ERC20 común, voting power = `balanceOf`) + `DAOTreasury` separado. Ciclo createProposal → vote → execute/cancel. 83 tests, 100% líneas/statements/funcs, 97.4% branches | ✅ Cerrado |
 | 16 | Lending & Borrowing | Protocolo de préstamos con colateral estilo Aave/Compound: deposit/borrow/repay/withdraw + liquidación, valuado en USD con oráculo Chainlink (`IAggregator`) + normalización de decimales, depósito con firma off-chain (ECDSA). 2 bugs de seguridad corregidos (`canBorrow`, `liquidate`). 39 tests (mocks + fork Arbitrum), 100% líneas/funcs | ✅ Cerrado |
+| 17 | Mint dApp | **Frontend** (primer proyecto no-Solidity): Next.js que conecta MetaMask, fuerza Arbitrum y mintea con `mintBAC()`. Integración web↔contrato hecha 2 veces: `ethers/` (ethers v6 crudo) y `wagmi/` (wagmi + viem). Sin contrato deployado (placeholder), foco en el patrón de integración | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 

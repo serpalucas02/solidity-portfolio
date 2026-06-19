@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #0d1117;
+  color: #e6edf3;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  text-align: center;
+  padding: 2.5rem;
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 16px;
+  max-width: 420px;
+  width: 90%;
+}
+
+h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #8b949e;
+  font-size: 0.9rem;
+  margin-bottom: 1.5rem;
+}
+
+button {
+  background: #238636;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.15s;
+}
+
+button:hover:not(:disabled) {
+  background: #2ea043;
+}
+
+button:disabled {
+  background: #30363d;
+  color: #8b949e;
+  cursor: not-allowed;
+}
+
+.account {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.balance {
+  color: #58a6ff;
+  font-weight: 600;
+  margin: 1rem 0;
+}
+
+.error {
+  color: #f85149;
+  font-size: 0.85rem;
+  margin-top: 1rem;
+}
