@@ -34,6 +34,7 @@
 | 15 | DAO / Governance | Gobernanza on-chain **hecha a mano** (NO usa el `Governor` de OZ): `DAO` + `DAOGovernanceToken` (ERC20 común, voting power = `balanceOf`) + `DAOTreasury` separado. Ciclo createProposal → vote → execute/cancel. 83 tests, 100% líneas/statements/funcs, 97.4% branches | ✅ Cerrado |
 | 16 | Lending & Borrowing | Protocolo de préstamos con colateral estilo Aave/Compound: deposit/borrow/repay/withdraw + liquidación, valuado en USD con oráculo Chainlink (`IAggregator`) + normalización de decimales, depósito con firma off-chain (ECDSA). 2 bugs de seguridad corregidos (`canBorrow`, `liquidate`). 39 tests (mocks + fork Arbitrum), 100% líneas/funcs | ✅ Cerrado |
 | 17 | Mint dApp | **Frontend** (primer proyecto no-Solidity): Next.js que conecta MetaMask, fuerza Arbitrum y mintea con `mintBAC()`. Integración web↔contrato hecha 2 veces: `ethers/` (ethers v6 crudo) y `wagmi/` (wagmi + viem). Sin contrato deployado (placeholder), foco en el patrón de integración | ✅ Cerrado |
+| 18 | Lottery (Chainlink VRF) | Lotería multi-ronda 100% random con **Chainlink VRF 2.5**: compra de tickets ponderados, 3 ganadores 50/30/20, comisiones, refunds. Flujo async request → `fulfillRandomWords`. **Bug crítico corregido**: push payment en el callback → pull pattern + ReentrancyGuard. 29 tests con `VRFCoordinatorV2_5Mock` (incl. test del ataque), 100% líneas/funcs | ✅ Cerrado |
 
 La tabla en el [README raíz](README.md) es la fuente de verdad para los proyectos completos.
 

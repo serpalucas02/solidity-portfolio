@@ -70,3 +70,12 @@
 [submodule "resources/upgradeability/lib/openzeppelin-contracts-upgradeable"]
 	path = resources/upgradeability/lib/openzeppelin-contracts-upgradeable
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts-upgradeable
+[submodule "projects/18-lottery-vrf/lib/forge-std"]
+	path = projects/18-lottery-vrf/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/18-lottery-vrf/lib/openzeppelin-contracts"]
+	path = projects/18-lottery-vrf/lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "projects/18-lottery-vrf/lib/chainlink-brownie-contracts"]
+	path = projects/18-lottery-vrf/lib/chainlink-brownie-contracts
+	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
