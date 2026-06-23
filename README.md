@@ -50,6 +50,7 @@ En [`notes/`](notes/) hay material consolidado para preparación de entrevistas:
 
 - **[`CONCEPTOS-CLAVE.md`](notes/CONCEPTOS-CLAVE.md)** — Guía temática con todos los conceptos cubiertos en los 11 proyectos (Solidity, DeFi, Foundry, gotchas).
 - **[`EXAMEN.html`](notes/EXAMEN.html)** — Examen interactivo multiple-choice (65+ preguntas) con feedback inmediato, explicaciones y score. Self-contained, abrí el HTML en cualquier browser.
+- **[`GUIA-ENTREVISTAS.html`](notes/GUIA-ENTREVISTAS.html)** — Guía de preparación para entrevistas: fundamentos de Solidity/EVM, **seguridad a nivel auditor** (estructurada según el OWASP Smart Contract Top 10 2025), DeFi, testing, gas, upgradeability, un deep-dive por proyecto (01→21) y un banco de preguntas. Self-contained, con buscador e impresión a PDF.
 
 En [`resources/`](resources/) hay material de referencia para consultar al construir:
 

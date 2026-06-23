@@ -174,6 +174,8 @@ Para patrones "production-quality" que vale la pena internalizar desde el princi
 
 ## Pendientes
 
+- **Preparar el portfolio para recruiters (cuando Lucas empiece a tirar CV)**: hacer una pasada de "presentación" del repo para que lo vea un recruiter/empleador. OJO: hoy el repo tiene **anotaciones internas de cómo trabajamos** (este `CLAUDE.md`, la memoria, notas de proceso) que no son para mostrar — hay que decidir qué se deja, qué se mueve y cómo se presenta. Tareas probables: completar "Sobre mí" del README raíz (LinkedIn/GitHub), pulir el README como landing del portfolio, revisar que cada proyecto se entienda solo, quizá deployar algo a una testnet para tener links vivos (ver el pendiente del 07). Lucas avisará cuándo arrancar esto.
+
 - **Deploy real de la NFT Collection (proyecto 07) a Arbitrum Sepolia**: el código está completo y compilado, falta ejecutar el deploy en una red real. Lucas no tenía ETH en wallet al cerrar el módulo y las faucets pedían balance mínimo. Pasos cuando consiga test ETH:
   1. Subir las imágenes y los JSONs (`uris/0.json`, `uris/1.json`) a IPFS (Pinata, NFT.Storage).
   2. Actualizar el `baseURI` en `DeployNFTCollection.s.sol` con el CID real.
