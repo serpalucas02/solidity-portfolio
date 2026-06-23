@@ -1,4 +1,4 @@
-# 20 — Solidity Assembly (Yul)
+# 20 — Inline Assembly (Yul)
 
 > **Inline assembly (Yul)** paso a paso: los opcodes fundamentales del EVM (storage, aritmética, bitwise, memoria), cómo funcionan los **reverts y los checks de overflow por debajo**, y patrones prácticos donde assembly da capacidades o gas que Solidity puro no alcanza (bit packing, hashing eficiente, `extcodesize`). Material **didáctico** para entender el EVM desde abajo.
 

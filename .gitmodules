@@ -86,5 +86,5 @@
 	path = projects/19-eip712-signatures/lib/openzeppelin-contracts
 	url = https://github.com/OpenZeppelin/openzeppelin-contracts
 [submodule "projects/20-solidity-assembly/lib/forge-std"]
-	path = projects/20-solidity-assembly/lib/forge-std
+	path = projects/20-inline-assembly/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
