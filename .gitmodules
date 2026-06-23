@@ -88,3 +88,12 @@
 [submodule "projects/20-solidity-assembly/lib/forge-std"]
 	path = projects/20-inline-assembly/lib/forge-std
 	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/21-uniswap-v3-interactions/lib/forge-std"]
+	path = projects/21-uniswap-v3-interactions/lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "projects/21-uniswap-v3-interactions/lib/v3-core"]
+	path = projects/21-uniswap-v3-interactions/lib/v3-core
+	url = https://github.com/Uniswap/v3-core
+[submodule "projects/21-uniswap-v3-interactions/lib/v3-periphery"]
+	path = projects/21-uniswap-v3-interactions/lib/v3-periphery
+	url = https://github.com/Uniswap/v3-periphery
