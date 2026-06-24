@@ -189,7 +189,15 @@ revert("msg");                   // revert directo</code></pre>
     <code>canBorrow</code> tenía un early-return (<code>if (ratio == max) return true</code>) que hacía que el <b>primer</b> préstamo (sin deuda previa) <b>nunca se validara contra el colateral</b> → cualquiera drenaba el pool. Fix: sacar el atajo y simular siempre la deuda nueva. Lección: un atajo válido en un contexto (<code>canWithdraw</code>) es un agujero en otro (<code>canBorrow</code>).</div>
 
     <h3>SC02 · Price Oracle Manipulation</h3>
-    <p>Atacante distorsiona el precio que lee el contrato (típicamente con un flash loan sobre un pool de baja liquidez usado como oráculo). <b>Prevención:</b> usar oráculos robustos (Chainlink), <b>nunca</b> el spot price de un DEX como fuente directa; usar <b>TWAP</b>; validar <b>freshness</b>: <code>price > 0</code> y <code>updatedAt</code> reciente (staleness check). <span class="muted">→ Proyectos 11, 16.</span></p>
+    <p>Atacante distorsiona el precio que lee el contrato (típicamente con un flash loan sobre un pool de baja liquidez usado como oráculo). <b>Prevención:</b> usar oráculos robustos (Chainlink), <b>nunca</b> el spot price de un DEX como fuente directa; usar <b>TWAP</b>; validar <b>freshness</b> (staleness check). <span class="muted">→ Proyectos 11, 16.</span></p>
+    <div class="box concept"><span class="t">Definiciones — TWAP y staleness</span>
+    <ul>
+      <li><b>TWAP (Time-Weighted Average Price)</b>: precio <b>promedio ponderado por tiempo</b> en una ventana (ej. últimos 30 min). El caso típico es el oráculo de Uniswap. Es resistente a manipulación: para mover un TWAP de 30 min habría que sostener el precio falso 30 min (carísimo), no alcanza un flash loan de 1 bloque. Más seguro que el "spot price" instantáneo.</li>
+      <li><b>Staleness (precio rancio)</b>: Chainlink actualiza cada cierto tiempo (su "heartbeat") o al moverse X%. Si el feed se atrasa/rompe, <code>latestRoundData()</code> devuelve un precio <b>viejo</b>. Usarlo como actual = liquidar/prestar mal. El check valida que el dato sea reciente.</li>
+    </ul></div>
+    <pre><code>(, int256 price,, uint256 updatedAt,) = feed.latestRoundData();
+require(price > 0, "bad price");                      // precio válido
+require(block.timestamp - updatedAt &lt; MAX_DELAY, "stale"); // freshness</code></pre>
     <pre><code>(, int256 price,, uint256 updatedAt,) = feed.latestRoundData();
 require(price > 0, "bad price");
 require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
@@ -231,8 +239,11 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
     <h3>SC10 · Denial of Service (DoS) & Griefing</h3>
     <p>Hacer que una función crítica sea inusable: loops no acotados sobre arrays que crecen, depender de un <code>.call</code> a una address que revierte, gas griefing. <b>Prevención:</b> pull over push, evitar loops sobre estructuras ilimitadas, no depender de transfers externos para avanzar estado.</p>
 
-    <h3>Extra · Signature Replay (firmas)</h3>
-    <p>Reusar una firma válida en otro contexto. <b>Las 3 defensas</b> (memorizalas): <b>nonce</b> (anti-replay, incrementa con cada uso), <b>deadline</b> (expiración), <b>domain separator</b> de <b>EIP-712</b> (ata la firma a <i>este</i> contrato + <i>esta</i> chain, anti cross-contract/cross-chain replay). Usar <code>ECDSA.recover</code> de OZ (maneja malleability y <code>address(0)</code>). <span class="muted">→ Proyectos 19 (EIP-712 + permit), 16 (depositWithSignature).</span></p>
+    <h3>Extra · Signature Replay & malleability (firmas)</h3>
+    <p><b>Replay:</b> reusar una firma válida en otro contexto. <b>Las 3 defensas</b> (memorizalas): <b>nonce</b> (anti-replay, incrementa con cada uso), <b>deadline</b> (expiración), <b>domain separator</b> de <b>EIP-712</b> (ata la firma a <i>este</i> contrato + <i>esta</i> chain, anti cross-contract/cross-chain replay).</p>
+    <div class="box concept"><span class="t">¿Qué es la signature malleability?</span>
+    Una firma ECDSA son 3 números <code>(r, s, v)</code>. La matemática permite que para una firma válida exista una <b>segunda versión</b> igual de válida (flipeando <code>s</code>). Si usás la firma como ID único para anti-replay, el atacante genera la variante (firma lo mismo) y la pasa como "otra" → bypassea el control. <b>Solución:</b> <code>ECDSA.recover</code> de OZ rechaza la <code>s</code> "alta" y <code>address(0)</code> — <b>nunca uses <code>ecrecover</code> crudo</b>. Y mejor anti-replay por <b>nonce</b>, no por hash de la firma.
+    <span class="muted"> → Proyectos 19, 16; <code>resources/signatures</code>.</span></div>
 
     <h3>Extra · Front-running / MEV</h3>
     <p>El mempool es público: un bot ve tu tx y la adelanta. <b>Sandwich</b> en swaps. <b>Prevención:</b> <code>amountOutMin</code> (slippage) y <code>deadline</code> en swaps; commit-reveal cuando aplica. <span class="muted">→ Proyectos 09, 10, 21. También: front-running de <code>permit</code> anotado en el 19.</span></p>
@@ -261,7 +272,13 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
     <h3>AMM — Automated Market Maker</h3>
     <p>Sin orderbook: un pool de dos tokens y una fórmula. <b>Uniswap V2:</b> <code>x · y = k</code> (producto constante). El precio sale del ratio de reservas; comprar mueve el precio (de ahí el <b>slippage</b>). <b>Impermanent loss:</b> si los precios divergen, ser LP rinde menos que holdear. <span class="muted">→ Proyectos 09, 10.</span></p>
     <h4>Uniswap V3 — liquidez concentrada</h4>
-    <p>El LP elige un <b>rango de precio</b> (<code>tickLower</code>/<code>tickUpper</code>) en vez de 0→∞ → mucho más eficiente en capital. <b>Ticks:</b> <code>precio = 1.0001^tick</code>. Precio guardado como <code>sqrtPriceX96</code> (raíz, fixed-point Q64.96). Las posiciones son <b>NFTs</b> (ERC-721) del NonfungiblePositionManager. <span class="muted">→ Proyecto 21.</span></p>
+    <p>El LP elige un <b>rango de precio</b> (<code>tickLower</code>/<code>tickUpper</code>) en vez de 0→∞ → mucho más eficiente en capital. Las posiciones son <b>NFTs</b> (ERC-721) del NonfungiblePositionManager. <span class="muted">→ Proyecto 21.</span></p>
+    <div class="box concept"><span class="t">sqrtPriceX96 y ticks — en criollo</span>
+    <ul>
+      <li><b>sqrtPriceX96</b>: V3 guarda el precio como su <b>raíz cuadrada</b>, en formato <b>fixed-point Q64.96</b> (= el número × 2<sup>96</sup>, porque Solidity no tiene decimales → para representar decimales multiplicás por 2<sup>96</sup> y trabajás con enteros). <b>¿Por qué la raíz?</b> La matemática de liquidez concentrada (cuánto token hay en un rango) queda mucho más simple y precisa con <code>sqrt(price)</code> que con <code>price</code>. Fórmula: <code>price = (sqrtPriceX96 / 2^96)²</code> (token1 por token0).</li>
+      <li><b>Ticks</b>: discretizan el precio: <code>price = 1.0001^tick</code> → cada tick = 0.01% de precio. Un LP provee entre <code>tickLower</code> y <code>tickUpper</code>.</li>
+    </ul>
+    <span class="muted">Para una entrevista no hace falta calcularlo: alcanza con saber QUÉ es (precio como sqrt en fixed-point para que la math de liquidez concentrada sea eficiente) y que los ticks discretizan el precio.</span></div>
 
     <h3>Lending / Borrowing</h3>
     <p><b>Sobre-colateralización:</b> pedís prestado menos de lo que vale tu garantía. <b>Health factor / ratio</b>: <code>(colateral_usd × collateralFactor) / deuda_usd</code>; si cae bajo el umbral, sos <b>liquidable</b>. <b>Liquidación:</b> un tercero repaga parte de tu deuda y se lleva colateral + penalidad → mantiene al protocolo solvente. <span class="muted">→ Proyecto 16.</span></p>
@@ -287,12 +304,20 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
     <h2 class="sec">4 · Tokens & estándares</h2>
     <h3>ERC-20</h3>
     <p>Fungible. Funciones clave: <code>transfer</code>, <code>approve</code> + <code>transferFrom</code> (modelo de delegación: el user aprueba, el contrato "chupa" con transferFrom). <b>Decimales:</b> 18 típico, pero USDC=6, WBTC=8 → fuente #1 de bugs. <b>SafeERC20:</b> wrapper de OZ que revierte si el token devuelve <code>false</code> (USDT). <span class="muted">→ 02, 06, 14, 16.</span></p>
-    <div class="box warn"><span class="t">approve race / front-running</span>
-    Cambiar un allowance de N a M directo es explotable; por eso existen <code>increaseAllowance</code> o aprobar a 0 primero. <code>permit</code> (EIP-2612) lo resuelve con firma.</div>
+    <div class="box warn"><span class="t">Allowance & el "approve race" (por qué se aprueba 0 primero)</span>
+    <b>Allowance</b> = cuánto puede gastar un <code>spender</code> de tus tokens (lo seteás con <code>approve</code>). <b>El ataque:</b> querés bajar el allowance de 100 a 50 con <code>approve(spender, 50)</code>. Un spender malicioso ve tu tx en el mempool y, <b>antes</b> de que se mine, gasta los 100 viejos (<code>transferFrom(100)</code>); cuando se mina tu <code>approve(50)</code>, gasta 50 más → <b>gastó 150 en vez de 50</b>. <b>Workaround histórico:</b> aprobar a <b>0 primero</b>, confirmar, y recién ahí a 50. <b>Lo moderno:</b> <code>increaseAllowance</code>/<code>decreaseAllowance</code> (cambios relativos) o <code>permit</code> (firma puntual). Es más un clásico de entrevista que algo de uso diario.</div>
     <h3>ERC-721 (NFT)</h3>
     <p>No fungible, cada <code>tokenId</code> único. <b><code>_safeMint</code></b> (no <code>_mint</code>): valida que el receptor sepa recibir NFTs (<code>onERC721Received</code>), si no se pierden. <code>tokenURI</code> + metadata off-chain (IPFS) por costo. <span class="muted">→ 07, 08.</span></p>
-    <h3>EIP-2612 Permit & EIP-712</h3>
-    <p><b>Permit:</b> approve por firma (sin tx aparte, gasless UX). <b>EIP-712:</b> typed data — la wallet muestra un struct legible en vez de un hash. Componentes: <b>domain separator</b> + <b>type hash</b> + <code>keccak256("\x19\x01" ‖ domainSeparator ‖ structHash)</code>. <span class="muted">→ Proyecto 19; <code>resources/signatures</code>.</span></p>
+    <h3>Firmas off-chain, EIP-712 y Permit</h3>
+    <div class="box concept"><span class="t">¿Qué es una firma off-chain?</span>
+    Firmás un mensaje con tu private key <b>fuera de la blockchain</b> (gratis, sin gas). Después <b>cualquiera</b> lleva esa firma on-chain y el contrato <b>verifica</b> con <code>ECDSA.recover</code> que la firmó tu address. Sirve para <b>autorizar algo sin pagar gas vos</b> — lo paga un <i>relayer</i>. Ej.: "autorizo retirar 100 USDC" lo firmás gratis, y el protocolo (o un bot) lo ejecuta.</div>
+    <ul>
+      <li><b>El problema de firmar un hash crudo:</b> la wallet te muestra un hexadecimal ilegible → firmás a ciegas (peligroso).</li>
+      <li><b>EIP-712 (typed data):</b> estándar para firmar <b>datos estructurados legibles</b> — la wallet muestra "Withdraw 100 USDC to 0xabc…", no un hash. El digest final = <code>keccak256("\x19\x01" ‖ domainSeparator ‖ structHash)</code>, donde el <b>domain separator</b> (name, version, chainId, address del contrato) <b>ata la firma a ESTE contrato y ESTA chain</b> (anti replay cross-contract/cross-chain).</li>
+      <li><b>Permit (EIP-2612):</b> aplicar esto al <code>approve</code>. En vez de una tx de <code>approve</code> (que cuesta gas), firmás el permiso off-chain y se ejecuta con <code>permit(...)</code> → <b>approve sin gas</b>, y en una sola tx junto al <code>transferFrom</code>.</li>
+      <li><b>Las 3 defensas siempre:</b> nonce (anti-replay), deadline (expira), domain separator (contexto).</li>
+    </ul>
+    <span class="muted">→ Proyecto 19 (PermitToken + GaslessVault), 16 (depositWithSignature); <code>resources/signatures</code>.</span>
   </section>
 
   <!-- ============ 5. TESTING ============ -->
@@ -310,10 +335,27 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
     <h3>Tipos de test</h3>
     <ul>
       <li><b>Unit:</b> happy path + cada revert.</li>
-      <li><b>Fuzz:</b> inputs random (256 por default) buscando romper un invariante. Sin <code>assert</code> no testea nada.</li>
-      <li><b>Invariant:</b> propiedades globales que siempre deben valer, con secuencias random de llamadas.</li>
+      <li><b>Fuzz:</b> una función de test que <b>recibe parámetros</b>; Foundry le mete inputs random (256 por default) buscando romper un <code>assert</code>. Sin assert no testea nada; <code>bound()</code>/<code>vm.assume()</code> acotan inputs inválidos.</li>
+      <li><b>Invariant:</b> una <b>propiedad que SIEMPRE debe valer</b>. Foundry tira <b>secuencias random de llamadas</b> al contrato (funciones + args al azar) y tras cada una chequea el invariante (ej. <code>sumaBalances == totalSupply</code>, o "k nunca baja" en un AMM). Diferencia con fuzz: fuzz prueba <b>una función</b>; invariant prueba <b>el sistema entero</b>.</li>
       <li><b>Fork testing:</b> corre contra un fork de mainnet/Arbitrum con contratos reales (Uniswap, Chainlink). Imprescindible para integraciones. <span class="muted">→ 09, 10, 11, 16, 21.</span></li>
     </ul>
+    <div class="grid2">
+      <div><h4>Fuzz — ejemplo</h4><pre><code>function testFuzz_deposit(uint256 amount) public {
+    amount = bound(amount, 1, 1e24);   // rango válido
+    token.mint(user, amount);
+    vm.prank(user);
+    vault.deposit(amount);
+    // debe valer para CUALQUIER amount:
+    assertEq(vault.balanceOf(user), amount);
+}</code></pre></div>
+      <div><h4>Invariant — ejemplo</h4><pre><code>// Foundry llama funciones random del "handler"
+// y tras cada secuencia chequea esto:
+function invariant_totalSupplyMatchesBalances()
+    public view
+{
+    assertEq(token.totalSupply(), handler.sumBalances());
+}</code></pre></div>
+    </div>
     <div class="box tip"><span class="t">Frase que suma en entrevista</span>
     "El test no está para confirmar que el código anda, sino para <b>intentar romperlo</b>." Y: <b>coverage 100% ≠ correcto</b> — las branches que quedan sin cubrir suelen ser guardas inalcanzables; saber <i>por qué</i> vale más que inflar el número.</div>
     <div class="box tip"><span class="t">Mocks Y fork (no es uno u otro)</span>
@@ -333,6 +375,8 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
       <li><b>Eventos</b> en vez de storage para data que solo se lee off-chain.</li>
       <li><code>via_ir = true</code> + optimizer para resolver "stack too deep" sin deformar el código. <span class="muted">→ 10.</span></li>
     </ul>
+    <div class="box concept"><span class="t">"Stack too deep" y via_ir — qué es y cuándo aparece</span>
+    El EVM tiene un <b>stack</b> donde solo podés acceder a las <b>~16 variables más recientes</b>. Si una función tiene demasiadas variables locales + parámetros + returns "vivas" al mismo tiempo (&gt;16), el compilador no las puede ubicar → error <b>"stack too deep"</b>. Aparece en funciones con muchas variables — ej. en el <b>proyecto 10</b>, las de add/remove liquidity (varios <code>amountA/amountB/min/deadline/returns</code> a la vez). <b><code>via_ir = true</code></b> compila vía <b>Yul IR</b>, que reusa slots de forma más inteligente y lo resuelve <b>sin</b> reescribir el código (la alternativa manual sería agrupar variables en <code>struct</code> o scoparlas en bloques <code>{ }</code>). Trade-off: compila más lento.</div>
   </section>
 
   <!-- ============ 7. UPGRADEABILITY ============ -->
@@ -345,6 +389,8 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
       <tr><td><b>UUPS</b></td><td>La función de upgrade vive en la <b>implementación</b> (más barato de deployar). Hay que protegerla sí o sí.</td></tr>
       <tr><td><b>Beacon</b></td><td>Muchos proxies apuntan a un beacon; actualizás uno y se actualizan todos.</td></tr>
     </table>
+    <div class="box concept"><span class="t">¿Dónde vive el address de la implementación?</span>
+    En un <b>slot de storage fijo del PROXY</b>, definido por <b>EIP-1967</b> para que ninguna variable normal lo pise: <code>keccak256("eip1967.proxy.implementation") - 1</code> (un slot "raro" a propósito). El <code>fallback</code> del proxy lee ese slot y hace <code>delegatecall</code> a esa address → ejecuta la <b>lógica</b> sobre el <b>storage del proxy</b>. <b>Actualizar = escribir una address nueva en ese slot</b> (en Transparent lo hace el ProxyAdmin; en UUPS la propia implementación, protegida por <code>_authorizeUpgrade</code>). El admin/owner vive en otro slot EIP-1967 (<code>...proxy.admin</code>). Por eso el <b>storage layout</b> importa: la lógica escribe en el storage del proxy; si reordenás variables entre versiones, pisás datos.</div>
     <div class="box danger"><span class="t">Riesgos clave</span>
     <ul>
       <li><b>Storage collision:</b> el layout del proxy y la implementación deben coincidir; al actualizar, solo <b>agregar</b> variables al final (nunca reordenar/insertar).</li>
@@ -533,6 +579,42 @@ require(block.timestamp - updatedAt < MAX_DELAY, "stale price");</code></pre>
 
     <details class="qa"><summary><span>¿Cómo prevenís el doble voto en governance?</span><span class="arrow">▶</span></summary><div class="body">
       <p>Con <b>snapshots</b>: congelar el poder de voto en el bloque de la propuesta (<code>ERC20Votes</code> + checkpoints). Si usás <code>balanceOf</code> en vivo, alguien transfiere y revota con los mismos tokens.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es la EVM y qué es el gas?</span><span class="arrow">▶</span></summary><div class="body">
+      <p><b>EVM</b> (Ethereum Virtual Machine): la "computadora" descentralizada que ejecuta el bytecode de los contratos, igual en todos los nodos. <b>Gas</b>: la unidad que mide cuánto cómputo/almacenamiento consume una operación; pagás <code>gas usado × gas price</code> en ETH. Evita loops infinitos y spam (todo cuesta).</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es un AMM?</span><span class="arrow">▶</span></summary><div class="body">
+      <p><b>Automated Market Maker</b>: un exchange sin orderbook. Un pool con dos tokens y una fórmula (<code>x·y=k</code> en V2) define el precio según el ratio de reservas. Comprar mueve el precio (slippage). Los LPs aportan liquidez y cobran fees.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es upgradeability y dónde vive el address de la implementación?</span><span class="arrow">▶</span></summary><div class="body">
+      <p>Los contratos son inmutables; para "actualizarlos" un <b>proxy</b> guarda el estado y hace <code>delegatecall</code> a una <b>implementación</b> (la lógica). El address de la implementación vive en un <b>slot fijo del proxy</b> definido por <b>EIP-1967</b> (<code>keccak256("eip1967.proxy.implementation")-1</code>). Actualizar = escribir un address nuevo ahí (UUPS: desde la implementación con <code>_authorizeUpgrade</code>; Transparent: desde el ProxyAdmin).</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es una firma off-chain y para qué sirve?</span><span class="arrow">▶</span></summary><div class="body">
+      <p>Firmar un mensaje con tu private key fuera de la chain (gratis). Otro lo lleva on-chain y el contrato verifica con <code>ECDSA.recover</code> que lo firmaste. Sirve para autorizar acciones <b>sin pagar gas vos</b> (lo paga un relayer). <b>EIP-712</b> lo hace legible (typed data); <b>permit</b> aplica esto al approve.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es la signature malleability?</span><span class="arrow">▶</span></summary><div class="body">
+      <p>Para una firma ECDSA válida existe una "segunda versión" igual de válida (flipeando <code>s</code>). Si usás la firma como ID anti-replay, el atacante pasa la variante como "otra" y la reusa. Fix: <code>ECDSA.recover</code> de OZ (low-s, rechaza <code>address(0)</code>); anti-replay por nonce.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>TWAP vs staleness</span><span class="arrow">▶</span></summary><div class="body">
+      <p><b>TWAP</b>: precio promedio ponderado por tiempo (ej. 30 min, oráculo de Uniswap); resiste manipulación puntual. <b>Staleness</b>: chequear que el precio del oráculo no esté viejo (<code>updatedAt</code> reciente + <code>price > 0</code>) antes de usarlo.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Qué es "stack too deep" y cómo se resuelve?</span><span class="arrow">▶</span></summary><div class="body">
+      <p>El EVM solo accede a las ~16 variables más recientes del stack. Si una función tiene &gt;16 variables vivas a la vez, el compilador falla con "stack too deep". Se resuelve con <code>via_ir = true</code> (compila vía Yul IR, reusa slots) o agrupando variables en structs/bloques.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>fuzz vs invariant test</span><span class="arrow">▶</span></summary><div class="body">
+      <p><b>Fuzz</b>: una función con parámetros que Foundry llama con inputs random buscando romper un assert. <b>Invariant</b>: una propiedad global que siempre debe valer, verificada tras secuencias random de llamadas a todo el contrato.</p>
+    </div></details>
+
+    <details class="qa"><summary><span>¿Por qué se aprueba 0 antes de cambiar un allowance?</span><span class="arrow">▶</span></summary><div class="body">
+      <p>Por el <b>approve race</b>: bajar de 100 a 50 deja una ventana donde el spender malicioso gasta los 100 viejos y después los 50 nuevos (150 total). Aprobar a 0 primero (o usar <code>increase/decreaseAllowance</code> o <code>permit</code>) lo mitiga.</p>
     </div></details>
   </section>
 
