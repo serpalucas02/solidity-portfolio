@@ -32,13 +32,13 @@ Estos contratos son **didácticos** (no manejan fondos, no son para producción)
 ## Contratos y tests
 
 - [`src/AssemblyBasics.sol`](src/AssemblyBasics.sol) · [`src/AssemblyErrors.sol`](src/AssemblyErrors.sol) · [`src/AssemblyUtils.sol`](src/AssemblyUtils.sol)
-- [`test/unit/AssemblyTest.t.sol`](test/unit/AssemblyTest.t.sol) — **23 tests**: cada opcode verificado contra su resultado esperado, los checks de overflow (`safeAdd`/`safeMul` revierten), el revert manual de `Error(string)`, `caller`/`origin` con `vm.prank`, y el round-trip de pack/unpack. Incluí los tests que faltaban (comparaciones, `readFromMemory`, `getCodeSize`, `getCallerAndOrigin`, `revertWithMessage`).
+- [`test/unit/AssemblyTest.t.sol`](test/unit/AssemblyTest.t.sol) — **23 tests**: cada opcode verificado contra su resultado esperado, los checks de overflow (`safeAdd`/`safeMul` revierten), el revert manual de `Error(string)`, `caller`/`origin` con `vm.prank`, y el round-trip de pack/unpack. Cubre también las comparaciones, `readFromMemory`, `getCodeSize`, `getCallerAndOrigin` y `revertWithMessage`.
 
 **Cobertura**: los tres contratos al **100%** (líneas, statements, branches y funciones).
 
 ## Cómo probarlo
 
-> Desde **adentro de este directorio** (`cd projects/20-solidity-assembly`).
+> Desde **adentro de este directorio** (`cd projects/20-inline-assembly`).
 
 ```bash
 forge build

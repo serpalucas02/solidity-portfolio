@@ -25,7 +25,7 @@ Esta es la primera vez en el portfolio donde **no todo vive on-chain**: el contr
 - ✅ **IPFS** — JSONs de metadata creados (`uris/0.json`, `uris/1.json`) siguiendo el estándar OpenSea.
 - ✅ **Set URIs** — patrón de **baseURI** (eficiente en gas — un solo string en lugar de uno por token).
 - ✅ **Deploy ERC-721** — `DeployNFTCollection.s.sol` con `vm.startBroadcast` y private key de env.
-- ⏸ **Arbiscan / OpenSea** — entendido conceptualmente; deploy real pendiente por falta de ETH en wallet (ver "Próximos pasos" más abajo).
+- ✅ **Tests** — suite de Foundry: **10 tests, 100% de coverage** (mint, cap de supply, safe-receiver, `tokenURI`, reverts).
 
 ## Estructura del proyecto
 
@@ -35,6 +35,8 @@ Esta es la primera vez en el portfolio donde **no todo vive on-chain**: el contr
 ├── remappings.txt                     ← @openzeppelin/, forge-std/
 ├── src/
 │   └── NFTCollection.sol              ← contrato ERC-721
+├── test/
+│   └── NFTCollection.t.sol            ← 10 tests (100% coverage)
 ├── script/
 │   └── DeployNFTCollection.s.sol      ← script de deploy
 ├── uris/
@@ -88,11 +90,13 @@ Esta es la primera vez en el portfolio donde **no todo vive on-chain**: el contr
 
 ## Cómo probarlo
 
-### Build local
+### Build y tests
 
 ```bash
 cd projects/07-nft-collection
 forge build
+forge test        # 10 tests
+forge coverage    # 100%
 ```
 
 ### Simulación del deploy (dry-run, sin gastar ETH)
@@ -140,14 +144,9 @@ forge script script/DeployNFTCollection.s.sol \
 - **Deploy scripts con `vm.envUint`**: nunca hardcodear private keys. El patrón estándar es `.env` + `vm.envUint` + agregar `.env` al `.gitignore` raíz (que ya lo tenemos).
 - **Override de `tokenURI` con `.json` al final**: la implementación default de OZ no incluye la extensión. Si tu folder de IPFS es `<CID>/0.json`, `<CID>/1.json`, vas a tener que sobreescribir para incluir `".json"`. Si no, el JSON nunca se va a fetchear bien.
 
-## Estado del deploy
+## Próximos pasos
 
-🔸 **Deploy real pendiente**: el código está completo y compilado, el script de deploy está escrito, y el flujo de mint vía Arbiscan está claro. **No se ejecutó en una red real** por falta de ETH en una wallet. Cuando consigas test ETH:
-
-- **Arbitrum Sepolia faucets** (gratis, no requieren mainnet ETH):
-  - [bridge.arbitrum.io](https://bridge.arbitrum.io/) (necesitás ETH en Sepolia primero, fácil de conseguir gratis).
-  - Faucets directos: buscar "Arbitrum Sepolia faucet" — varios proyectos los proveen.
-- Después del deploy real, agregar a este README: address del contrato + link a Arbiscan + link a OpenSea.
+El contrato está completo, **testeado (100% coverage)** y compilado, con el **script de deploy listo** (`DeployNFTCollection.s.sol`). Como continuación natural: deploy a una **testnet** (Arbitrum Sepolia) y subida de la metadata definitiva a **IPFS**, para enlazar luego el contrato en Arbiscan y la colección en OpenSea.
 
 ## Posibles mejoras
 
@@ -174,16 +173,7 @@ forge script script/DeployNFTCollection.s.sol \
 - **`indexed` en eventos** (mencionado arriba).
 - **Custom errors** en vez de require strings.
 
-### 🧪 Testing
-
-- **Suite de tests**: el proyecto compila pero **no tiene tests**. Cobertura mínima recomendada:
-  - `testMint()` — happy path: mintea, verifica `ownerOf(tokenId) == user`.
-  - `testCannotMintMoreThanSupply()` — al llegar al cap, revierte.
-  - `testTokenURI()` — devuelve `baseURI + tokenId + ".json"` correctamente.
-  - `testTokenURIRevertsForNonexistentToken()` — `tokenURI(999)` revierte porque no existe.
-  - `testCounterIncrements()` — minteos consecutivos generan `tokenId 0, 1, 2, ...`.
-
 ### 🖼️ Producto
 
-- **Subir las imágenes reales a IPFS** (los placeholders `REEMPLAZAR_CON_CID_DE_LA_IMAGEN_0` siguen ahí).
+- **Subir las imágenes reales a IPFS** y completar los CIDs en los JSONs de metadata.
 - **`contractURI()`**: agregar para que OpenSea muestre metadata de la **colección completa** (nombre, descripción, banner, link). Es un endpoint opcional pero mejora mucho la presentación.

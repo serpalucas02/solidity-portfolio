@@ -20,7 +20,7 @@ Dos formas de usarlo, las dos en este proyecto:
 
 ## Análisis de seguridad
 
-A diferencia de otros módulos, **el código está sólido**: usa las primitivas de OZ correctamente (no reinventa `ecrecover`), respeta CEI, y aplica las tres defensas de firma (nonce + deadline + domain). No encontré vulnerabilidades críticas. Lo que sí dejo anotado como mejoras:
+A diferencia de otros módulos, **el código está sólido**: usa las primitivas de OZ correctamente (no reinventa `ecrecover`), respeta CEI, y aplica las tres defensas de firma (nonce + deadline + domain). El código no presenta vulnerabilidades críticas. Mejoras anotadas:
 
 - 🟡 **Permit front-running (DoS de bajo impacto)** en `depositWithPermit`: si alguien ve la firma del permit en el mempool y llama `token.permit(...)` directamente antes, el nonce se consume y el `depositWithPermit` revierte. No roba fondos (solo molesta; el usuario reenvía). El patrón estándar de OZ para mitigarlo es envolver el `permit` en un `try/catch`.
 - 🟡 **`SafeERC20`**: el vault usa `token.transferFrom`/`transfer` directos. Funciona porque el token es un OZ ERC-20 conocido (revierte en fallo), pero para aceptar tokens arbitrarios convendría `SafeERC20`.

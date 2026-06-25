@@ -24,7 +24,7 @@ El proyecto abarca los tres tipos de interacción, un contrato wrapper por cada 
 
 Los tres contratos son **wrappers didácticos** bien hechos. Lo más importante a destacar:
 
-- ✅ **`UniswapV3Flash` valida el callback correctamente** (lo crítico de un flash loan): recomputa la dirección del pool desde el `factory` (`getPool(token0, token1, fee)`) y exige `msg.sender == expectedPool`. Sin esto, **cualquiera** podría llamar tu callback y drenarte. El profe lo hace bien.
+- ✅ **`UniswapV3Flash` valida el callback correctamente** (lo crítico de un flash loan): recomputa la dirección del pool desde el `factory` (`getPool(token0, token1, fee)`) y exige `msg.sender == expectedPool`. Sin esto, **cualquiera** podría llamar tu callback y drenarte — acá está implementado correctamente.
 - 🟡 **`UniswapV3Liquidity` usa `amount0Min = amount1Min = 0`** (sin slippage protection al proveer liquidez). Está documentado como simplificación, pero en producción es vector de MEV/sandwich.
 - 🟡 **`SafeERC20`**: los contratos usan `transferFrom`/`approve` directos. Funciona con WETH/USDC/DAI, pero tokens no estándar (USDT) requerirían `SafeERC20`.
 - 🟡 **Ownership del NFT**: `mintPosition` entrega el NFT a `msg.sender`; para que `decrease`/`collect` funcionen vía este contrato, el usuario tendría que aprobarle el NFT (o interactuar directo con el Position Manager). Es un detalle de diseño didáctico.

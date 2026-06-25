@@ -38,7 +38,6 @@
 - ✅ **Preventa de tokens** — diseño multi-fase con caps de tokens y deadlines de tiempo.
 - ✅ **Fases de la preventa** — `uint256[][3] phases` con `[cap, price, deadline]` por fase.
 - ✅ **Blacklisting** — `blacklistAddress` y `removeAddressFromBlacklist` (`onlyOwner`).
-- ✅ **NatSpec comments** — _pendiente (no aplicado, ver Posibles Mejoras)._
 - ✅ **Emergency withdraw** — `emergencyERC20Withdraw` + `emergencyETHWithdraw`.
 - ✅ **Periodos** — `startingTime` / `endingTime` + `phases[currentPhase][2]` (deadline por fase).
 - ✅ **Matemáticas DeFi** — normalización por decimales en `buyWithStableCoin` (USDC 6 dec vs DAI 18 dec).
@@ -50,7 +49,7 @@
 
 **Estado final**: **24/24 tests pasando** ✅ con fork de Arbitrum. Coverage: **100% líneas, 100% statements, 100% funciones, 93.33% branches**.
 
-> Los 2 branches no cubiertos son los paths "tiempo" + "max phase" del `checkCurrentPhase`, y los `require(success, "Transfer failed.")` de `.call{value:}` (necesitan setup con contratos rejecter para forzar el fallo). Decidimos no perseguir esa cobertura porque agrega ruido sin ganancia funcional real — el 100% en líneas/funciones ya valida toda la lógica.
+> Los 2 branches no cubiertos son los paths "tiempo" + "max phase" del `checkCurrentPhase`, y los `require(success, "Transfer failed.")` de `.call{value:}` (necesitan setup con contratos rejecter para forzar el fallo). No se persigue esa cobertura porque agrega ruido sin ganancia funcional real — el 100% en líneas/funciones ya valida toda la lógica.
 
 ## Estructura del proyecto
 
@@ -181,7 +180,7 @@ forge coverage --fork-url $ARBITRUM_RPC --report summary
 
 - **`require` con strings vs custom errors**: ya mencionado, pero también afecta el linter de Foundry — varios warnings de `block-timestamp` aparecen en build. No son bugs, son advertencias informativas.
 - **`phases` como struct en vez de `uint256[][3]`**: hoy las fases son `[cap, price, deadline]` como array. Un struct `Phase { uint256 cap; uint256 price; uint256 deadline; }` es más legible (acceso por nombre vs índice numérico).
-- **Eventos faltantes**: `blacklistAddress`, `removeAddressFromBlacklist`, `emergencyERC20Withdraw`, `emergencyETHWithdraw` y `changeStakingPeriod`-style functions no emiten eventos. Off-chain indexers (frontends, The Graph) no se enteran cuando cambian estos estados críticos.
+- **Eventos faltantes**: `blacklistAddress`, `removeAddressFromBlacklist`, `emergencyERC20Withdraw` y `emergencyETHWithdraw` no emiten eventos. Off-chain indexers (frontends, The Graph) no se enteran cuando cambian estos estados críticos.
 - **NatSpec comments**: el módulo del curso lo lista como feature pero el contrato no tiene documentación NatSpec (`@notice`, `@param`, `@return`). Agregarla mejora la legibilidad y permite herramientas como Solidoc generar docs.
 
 ### 🧪 Testing

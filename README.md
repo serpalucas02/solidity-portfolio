@@ -1,75 +1,72 @@
-# Solidity Portfolio
+# Solidity Portfolio — Lucas Nahuel Serpa
 
-Portafolio personal de proyectos desarrollados durante mi formación en Solidity y desarrollo de smart contracts.
+**🌐 Idioma:** Español · [English](README.en.md)
 
-## Sobre mí
-
-> _Completar con una breve descripción personal: quién soy, qué busco, dónde encontrarme (LinkedIn, GitHub, etc.)._
-
-## Estructura del repositorio
-
-```
-solidity-portfolio/
-├── projects/        # Cada proyecto del curso vive en su propia carpeta
-│   └── 00-template/ # Plantilla base para arrancar un proyecto nuevo
-├── notes/           # Apuntes del curso, conceptos, repaso
-└── resources/       # Links útiles, documentación, referencias
-```
-
-## Proyectos
-
-| # | Proyecto | Descripción | Tecnologías | Estado |
-|---|----------|-------------|-------------|--------|
-| 01 | [First Contract](projects/01-first-contract/) | Contrato de práctica para experimentar con estado, eventos, modifiers, visibilidad y separación de lógica. | Solidity 0.8.24, Remix | ✅ Completo |
-| 02 | [First Token](projects/02-first-token/) | Primer token ERC-20 heredando de OpenZeppelin, con mint inicial de 1000 unidades al deployer. | Solidity 0.8.24, OpenZeppelin, Remix, MetaMask | ✅ Completo |
-| 03 | [Smart Contract Systems](projects/03-smart-contract-systems/) | Cheat-sheet del módulo: `msg.sender`/`tx.origin`, llamadas entre contratos vía interfaz, manejo de errores (`require` vs custom errors), `payable` y patrón withdraw. | Solidity 0.8.24, Remix | ✅ Completo |
-| 04 | [Cryptobank](projects/04-cryptobank/) | Banco descentralizado: depósito y retiro de ETH con balance per-user, tope máximo configurable por un admin, patrón CEI anti-reentrancy. | Solidity 0.8.24, Remix | ✅ Completo |
-| 05 | [Foundry · Calculadora](projects/05-foundry-calculadora/) | Primer proyecto con Foundry: calculadora con 4 operaciones + 11 tests (unit + fuzz) verificando happy paths, reverts y división por cero. | Solidity 0.8.24, Foundry, forge-std | ✅ Completo |
-| 06 | [Staking App](projects/06-staking-app/) | App de staking con dos contratos: ERC-20 propio + StakingApp que custodia depósitos y paga rewards en ETH. CEI pattern, SafeERC20, 14 tests con cheatcodes (`vm.warp`, `vm.deal`, `vm.prank`). | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
-| 07 | [NFT Collection](projects/07-nft-collection/) | Colección ERC-721 con metadata off-chain en IPFS, mint público con tope de supply, deploy script para Arbitrum. | Solidity 0.8.24, Foundry, OpenZeppelin, IPFS, Arbitrum | ✅ Código completo |
-| 08 | [NFT Marketplace](projects/08-nft-marketplace/) | Marketplace de NFTs sin custodia: listar, cancelar y comprar ERC-721 pagando en ETH. CEI + ReentrancyGuard, approve/safeTransferFrom, 9 tests. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
-| 09 | [Swapping App](projects/09-swapping-app/) | Wrapper de Uniswap V2 para swappear tokens ERC-20. Primer proyecto integrando con un protocolo DeFi real, testeado con **fork de Arbitrum** contra USDC y DAI reales. | Solidity 0.8.24, Foundry, OpenZeppelin, Uniswap V2 | ✅ Completo |
-| 10 | [Liquidity Pools](projects/10-liquidity-pools/) | Extensión del wrapper de Uniswap V2 con **add / remove liquidity** y un combo atómico "swap + add". Fork de Arbitrum contra los pools reales de USDC/DAI. | Solidity 0.8.24, Foundry, OpenZeppelin, Uniswap V2 | ✅ Completo |
-| 11 | [Presale](projects/11-presale/) | Preventa multi-fase con pago en USDC / DAI / ETH, integración con **Chainlink Price Feed** (ETH/USD), claim pattern, blacklist y emergency withdraws. Fork de Arbitrum, 24 tests. | Solidity 0.8.24, Foundry, OpenZeppelin, Chainlink | ✅ Completo |
-| 12 | [Reentrancy Attack](projects/12-reentrancy-attack/) | Laboratorio de seguridad: un `SimpleBank` vulnerable por **CEI roto** y un `Attacker` que lo drena por completo vía reentrancy. Test que demuestra el robo de fondos ajenos + el fix (CEI / ReentrancyGuard). | Solidity 0.8.24, Foundry | ✅ Completo |
-| 13 | [ABI Encoding](projects/13-abi-encoding/) | Codificación y hashing de parámetros para estructuras DeFi (pool IDs, posiciones, órdenes, swap data). `abi.encode` vs `abi.encodePacked`, colisiones y `keccak256`. 18 tests. | Solidity 0.8.24, Foundry | ✅ Completo |
-| 14 | [Yield Farming](projects/14-yield-farming/) | Staking con rewards en token separado, patrón **`rewardPerToken` + `rewardDebt`** (estilo MasterChef / Synthetix): create pool, stake, withdraw, claim. Reparto proporcional al stake y al tiempo. 24 tests, 100% coverage. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
-| 15 | [DAO / Governance](projects/15-dao/) | Gobernanza on-chain hecha a mano: token de voto, `DAO` (propose → vote → execute/cancel, quórum + mayoría) y `DAOTreasury` separado. Voting power = `balanceOf`, separación lógica/fondos. 83 tests, 100% líneas. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
-| 16 | [Lending & Borrowing](projects/16-lending-borrowing/) | Protocolo de préstamos con colateral estilo Aave/Compound: deposit / borrow / repay / withdraw + liquidación, valuado en USD con **oráculo Chainlink** (normalización de decimales). Depósito con firma off-chain (ECDSA). 2 bugs de seguridad encontrados y corregidos. 39 tests (mocks + fork de Arbitrum), 100% líneas. | Solidity 0.8.24, Foundry, OpenZeppelin, Chainlink | ✅ Completo |
-| 17 | [Mint dApp](projects/17-mint-dapp/) | **Frontend** que conecta MetaMask, fuerza Arbitrum y mintea un token con `mintBAC()`. Integración web ↔ smart contract implementada **dos veces**: con **ethers v6** (crudo) y con **wagmi + viem** (stack moderno). Provider vs signer, ABI, leer (gratis) vs escribir (gas). | Next.js, React, ethers v6, wagmi, viem | ✅ Completo |
-| 18 | [Lottery (Chainlink VRF)](projects/18-lottery-vrf/) | Lotería multi-ronda 100% random con **Chainlink VRF 2.5** (flujo async request → `fulfillRandomWords`), 3 ganadores 50/30/20, comisiones y refunds. **Bug crítico encontrado y corregido**: push payment en el callback → **pull pattern** (+ ReentrancyGuard). 29 tests con `VRFCoordinatorV2_5Mock`, 100% líneas/funcs. | Solidity 0.8.24, Foundry, Chainlink VRF | ✅ Completo |
-| 19 | [EIP-712 Signatures](projects/19-eip712-signatures/) | Firmas **estructuradas (typed data)**: ERC-20 con **permit** (ERC-2612, approvals sin gas) + un `GaslessVault` con un **struct EIP-712 propio** (`WithdrawAuthorization`) para depósitos/retiros por firma. Domain separator, nonces, anti cross-contract replay. 29 tests (incl. fuzz), 100% coverage. | Solidity 0.8.24, Foundry, OpenZeppelin | ✅ Completo |
-| 20 | [Inline Assembly (Yul)](projects/20-inline-assembly/) | **Inline assembly** paso a paso: opcodes del EVM (storage, aritmética, bitwise, memoria), cómo funcionan `revert`/`require`/overflow por debajo, y patrones prácticos (bit packing, hashing, `extcodesize`). Foco en la **lección de seguridad**: assembly desactiva las barreras de Solidity. 23 tests, 100% coverage. | Solidity 0.8.24, Foundry | ✅ Completo |
-| 21 | [Uniswap V3 Interactions](projects/21-uniswap-v3-interactions/) | Integración con **Uniswap V3** (liquidez concentrada): **swaps** (single/multi-hop), **posiciones de liquidez** como NFTs (mint/increase/decrease/collect) y **flash loans** (con la verificación de callback correcta). 14 tests de **fork contra mainnet real**. Evolución de los proyectos 09/10 (V2). | Solidity 0.8.24, Foundry, Uniswap V3 | ✅ Completo |
-
-> A medida que vaya completando proyectos los voy listando acá con enlace a su carpeta.
-
-## 📚 Material de estudio
-
-En [`notes/`](notes/) hay material consolidado para preparación de entrevistas:
-
-- **[`CONCEPTOS-CLAVE.md`](notes/CONCEPTOS-CLAVE.md)** — Guía temática con todos los conceptos cubiertos en los 11 proyectos (Solidity, DeFi, Foundry, gotchas).
-- **[`EXAMEN.html`](notes/EXAMEN.html)** — Examen interactivo multiple-choice (65+ preguntas) con feedback inmediato, explicaciones y score. Self-contained, abrí el HTML en cualquier browser.
-- **[`GUIA-ENTREVISTAS.html`](notes/GUIA-ENTREVISTAS.html)** — Guía de preparación para entrevistas: fundamentos de Solidity/EVM, **seguridad a nivel auditor** (estructurada según el OWASP Smart Contract Top 10 2025), DeFi, testing, gas, upgradeability, un deep-dive por proyecto (01→21) y un banco de preguntas. Self-contained, con buscador e impresión a PDF.
-
-En [`resources/`](resources/) hay material de referencia para consultar al construir:
-
-- **[`oracles/`](resources/oracles/)** — Cheat-sheet de seguridad de oráculos (Chainlink & Pyth): qué validar al leer un precio (staleness, confidence interval), modelo push vs pull y checklist por integración.
-- **[`signatures/`](resources/signatures/)** — Cheat-sheet de seguridad de firmas off-chain: los 3 ataques clásicos (`ecrecover` → `address(0)`, replay, signature malleability) y cómo blindarlos con `ECDSA` + nonce/deadline.
-- **[`upgradeability/`](resources/upgradeability/)** — Patrones de contratos actualizables (Transparent, UUPS, Beacon + mención de Diamond) **implementados y testeados** con OZ Upgradeable: proxy + `delegatecall`, gotchas de seguridad (initializer, storage layout) y cuándo usar cada uno. 9 tests.
-
-## Cómo usar este repositorio
-
-1. Cada proyecto está en `projects/NN-nombre-proyecto/`.
-2. Dentro de cada carpeta hay un `README.md` con la descripción, instrucciones de despliegue y aprendizajes.
-3. Los contratos `.sol` están en `projects/NN-nombre-proyecto/contracts/`.
-
-## Stack / Herramientas
-
-- **Solidity** — lenguaje principal
-- **Remix IDE** — entorno de desarrollo inicial
-- _A futuro: posiblemente Hardhat o Foundry, frontend con Next.js, etc._
+> **Smart Contract Developer** · Senior Full Stack Developer
+> Portfolio de desarrollo blockchain: 21 proyectos del programa + 3 proyectos propios fullstack, deployados y verificados.
 
 ---
 
-_Este portafolio se actualiza constantemente a medida que avanzo en el curso._
+## Sobre mí
+
+Soy **Lucas Nahuel Serpa**, desarrollador full stack especializándome en **smart contracts y Web3**. Vengo de varios años construyendo software de producción para el **sector financiero** (el área de inversiones de **Santander Río** y la aseguradora **Zurich Santander**) y aplicaciones empresariales (hoy **Senior Full Stack Developer** en TanGo Energy Argentina). Esa experiencia en sistemas críticos me dejó un foco fuerte en **seguridad, testing y código robusto** — que ahora aplico al desarrollo on-chain.
+
+Completé un **Máster intensivo en desarrollo Blockchain** (Blockchain Accelerator, 100% práctico) construyendo +25 proyectos DeFi. Este portfolio reúne **24**: los 21 del programa (de fundamentos de Solidity a DeFi avanzado) y **3 proyectos propios fullstack**, deployados y verificados en testnet, cada uno con demo en vivo. Trabajo con **mentalidad de auditor**: tests con 100% de coverage y revisión de vulnerabilidades antes de cada deploy.
+
+Busco sumarme a un equipo de **Web3 / smart contracts** (empresas de habla hispana; inglés escrito sin problema).
+
+📍 CABA, Buenos Aires, Argentina · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
+
+---
+
+## 🚀 Proyectos destacados
+
+Tres proyectos **propios y fullstack** (contrato + frontend), cada uno con contrato auditado, **100% de coverage**, deployado y **verificado en Sepolia**, y demo en vivo.
+
+| Proyecto | Qué es | Demo | Repo |
+|----------|--------|------|------|
+| 🌱 **On-Chain Garden** | NFT dinámico **100% on-chain**: una planta que crece al regarla; imagen (SVG) y metadata generadas por el propio contrato (sin IPFS). | [Live](https://onchain-garden.vercel.app) | [GitHub](https://github.com/serpalucas02/onchain-garden) |
+| 💸 **StreamPay** | **Streaming de pagos** ERC-20 en tiempo real (sueldo "por segundo"): create / withdraw / cancel con **pull-settlement** anti-bloqueo. | [Live](https://streampay-phi.vercel.app) | [GitHub](https://github.com/serpalucas02/streampay) |
+| 🔁 **MiniSwap** | **AMM** de producto constante (`x·y=k`) hecho desde cero: swap + add/remove liquidity con LP tokens y fee del 0.3%. | [Live](https://miniswap-delta.vercel.app) | [GitHub](https://github.com/serpalucas02/miniswap) |
+
+Stack de los customs: Solidity · Foundry · OpenZeppelin · Next.js · wagmi · viem · TypeScript · Tailwind.
+
+---
+
+## 📚 Proyectos del programa (Blockchain Accelerator)
+
+Recorrido de fundamentos de Solidity hasta DeFi avanzado. Cada uno vive en [`projects/`](projects/) con su propio README.
+
+| # | Proyecto | Descripción | Estado |
+|---|----------|-------------|--------|
+| 01 | [First Contract](projects/01-first-contract/) | Práctica de estado, eventos, modifiers, visibilidad. | ✅ |
+| 02 | [First Token](projects/02-first-token/) | Primer ERC-20 heredando de OpenZeppelin. | ✅ |
+| 03 | [Smart Contract Systems](projects/03-smart-contract-systems/) | `msg.sender`/`tx.origin`, llamadas entre contratos, errores, `payable`, patrón withdraw. | ✅ |
+| 04 | [Cryptobank](projects/04-cryptobank/) | Banco descentralizado: depósito/retiro de ETH, tope por admin, CEI anti-reentrancy. | ✅ |
+| 05 | [Foundry · Calculadora](projects/05-foundry-calculadora/) | Primer Foundry: 11 tests (unit + fuzz). | ✅ |
+| 06 | [Staking App](projects/06-staking-app/) | ERC-20 propio + staking con rewards en ETH. CEI, SafeERC20, 14 tests. | ✅ |
+| 07 | [NFT Collection](projects/07-nft-collection/) | ERC-721 con metadata en IPFS, mint con tope, deploy a Arbitrum. | ✅ |
+| 08 | [NFT Marketplace](projects/08-nft-marketplace/) | Marketplace de NFTs sin custodia (list/cancel/buy en ETH). CEI + ReentrancyGuard, 9 tests. | ✅ |
+| 09 | [Swapping App](projects/09-swapping-app/) | Wrapper de Uniswap V2, testeado con **fork de Arbitrum** (USDC/DAI reales). | ✅ |
+| 10 | [Liquidity Pools](projects/10-liquidity-pools/) | Add/remove liquidity + combo "swap + add". Fork de Arbitrum. | ✅ |
+| 11 | [Presale](projects/11-presale/) | Preventa multi-fase (USDC/DAI/ETH) con **Chainlink Price Feed**, claim pattern, blacklist. 24 tests. | ✅ |
+| 12 | [Reentrancy Attack](projects/12-reentrancy-attack/) | PoC de seguridad: banco vulnerable (CEI roto) + atacante que lo drena vía reentrancy + fix. | ✅ |
+| 13 | [ABI Encoding](projects/13-abi-encoding/) | `abi.encode` vs `encodePacked`, colisiones y `keccak256`. 18 tests. | ✅ |
+| 14 | [Yield Farming](projects/14-yield-farming/) | Staking con rewards (`rewardPerToken` + `rewardDebt`). 24 tests, 100% coverage. | ✅ |
+| 15 | [DAO / Governance](projects/15-dao/) | Gobernanza on-chain hecha a mano (propose → vote → execute) + treasury separado. 83 tests. | ✅ |
+| 16 | [Lending & Borrowing](projects/16-lending-borrowing/) | Préstamos con colateral estilo Aave/Compound + **oráculo Chainlink** + ECDSA. 2 bugs corregidos. 39 tests. | ✅ |
+| 17 | [Mint dApp](projects/17-mint-dapp/) | **Frontend**: MetaMask + mint, integrado **dos veces** (ethers v6 y wagmi + viem). | ✅ |
+| 18 | [Lottery (Chainlink VRF)](projects/18-lottery-vrf/) | Lotería random con **VRF 2.5**. **Bug crítico corregido**: push → pull pattern. 29 tests. | ✅ |
+| 19 | [EIP-712 Signatures](projects/19-eip712-signatures/) | Firmas typed-data: ERC-2612 permit + `GaslessVault` con struct EIP-712 propio. 29 tests. | ✅ |
+| 20 | [Inline Assembly (Yul)](projects/20-inline-assembly/) | Inline assembly paso a paso + la lección de seguridad. 23 tests, 100% coverage. | ✅ |
+| 21 | [Uniswap V3 Interactions](projects/21-uniswap-v3-interactions/) | Swaps, posiciones de liquidez (NFTs) y flash loans. 14 tests con **fork de mainnet**. | ✅ |
+
+---
+
+## 🛠️ Stack
+
+Solidity · Foundry · OpenZeppelin · Chainlink · Uniswap V2/V3 · Next.js · wagmi · viem · React / React Native · Node.js · Oracle / PL-SQL
+
+## 📫 Contacto
+
+[GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com

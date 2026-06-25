@@ -15,13 +15,13 @@ Cada ronda: el owner la abre → los jugadores compran tickets (más tickets = m
 - **Máquina de estados** de la ronda: `OPEN → CALCULATING → CLOSED` (o refund si no hubo jugadores suficientes).
 - **CEI** estricto y **custom errors** en cada validación.
 
-## Seguridad: la vulnerabilidad que encontramos y arreglamos
+## Seguridad: la vulnerabilidad encontrada y corregida
 
 Auditando el contrato apareció el bug clásico de toda lotería con VRF:
 
 🔴 **Push payments en el callback (DoS / lotería trabada).** La versión original **transfería** los premios dentro de `fulfillRandomWords`. Como ese callback lo llama Chainlink, si **un ganador es un contrato que rechaza ETH** (a propósito o no), el `.call` falla → **el callback entero revierte** → la ronda queda en `CALCULATING` **para siempre**, con los fondos atrapados y los demás ganadores sin cobrar. Un atacante traba la lotería comprando un ticket desde un contrato que rechaza ETH.
 
-✅ **Fix — pull payment pattern.** Ahora `fulfillRandomWords` **solo asigna** los premios a un ledger (`s_prizes`); cada ganador los retira con **`claimPrize()`**. El callback quedó **a prueba de revert**: nadie puede trabarlo. Sumamos también **`ReentrancyGuard`** en todas las funciones que mueven ETH.
+✅ **Fix — pull payment pattern.** Ahora `fulfillRandomWords` **solo asigna** los premios a un ledger (`s_prizes`); cada ganador los retira con **`claimPrize()`**. El callback quedó **a prueba de revert**: nadie puede trabarlo. Además, **`ReentrancyGuard`** en todas las funciones que mueven ETH.
 
 > El test [`testMaliciousWinnerCannotBrickLottery`](test/Lottery.t.sol) **demuestra el ataque**: un contrato que rechaza ETH gana el primer premio, el callback **completa igual** (ronda `CLOSED`), los ganadores honestos cobran, y el atacante simplemente no puede reclamar **su** premio — sin afectar a nadie.
 
