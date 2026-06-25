@@ -47,3 +47,6 @@ desktop.ini
 # Otros
 *.tmp
 *.bak
+
+# Notas internas de trabajo (no son parte del portfolio público)
+CLAUDE.md
