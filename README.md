@@ -13,7 +13,7 @@
 
 Soy **Lucas Nahuel Serpa**, desarrollador full-stack especializándome en **blockchain**. Vengo de varios años construyendo software de producción para el **sector financiero** (el área de inversiones de **Santander Río** y la aseguradora **Zurich Santander**) y aplicaciones empresariales (hoy **Senior Full-Stack Developer** en TanGo Energy Argentina). Esa experiencia en sistemas críticos me dejó un foco fuerte en **seguridad, testing y código robusto** — que ahora aplico al desarrollo on-chain.
 
-Completé un **Máster intensivo en desarrollo Blockchain** (Blockchain Accelerator, 100% práctico) construyendo +25 proyectos DeFi. Este portfolio reúne **24**: los 21 del programa (de fundamentos de Solidity a DeFi avanzado) y **3 proyectos propios fullstack**, deployados y verificados en testnet, cada uno con demo en vivo. Trabajo con **mentalidad de auditor**: tests exhaustivos (incluidos casos adversariales) y revisión de vulnerabilidades antes de cada deploy.
+Completé un **programa intensivo en desarrollo Blockchain** (Blockchain Accelerator, 100% práctico) construyendo +25 proyectos DeFi. Este portfolio reúne **24**: los 21 del programa (de fundamentos de Solidity a DeFi avanzado) y **3 proyectos propios fullstack**, deployados y verificados en testnet, cada uno con demo en vivo. Trabajo con **mentalidad de auditor**: tests exhaustivos (incluidos casos adversariales) y revisión de vulnerabilidades antes de cada deploy.
 
 Busco sumarme a un equipo de **Web3 / Blockchain**. Abierto a trabajo remoto; me manejo en español e inglés (escrito).
 
