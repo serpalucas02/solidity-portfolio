@@ -107,25 +107,6 @@ forge script script/DeployNFTCollection.s.sol --rpc-url $ARBITRUM_RPC
 
 Esto **simula** el deploy localmente — te dice cuánto gas costaría, qué addresses deployaría, etc. **Sin `--broadcast` no manda nada a la red**.
 
-### Deploy real a Arbitrum Sepolia (testnet — gratis con faucet)
-
-```bash
-# 1. Crear .env con:
-# DEPLOYER_PRIVATE_KEY=0x<tu_private_key>
-# ARBITRUM_RPC=https://sepolia-rollup.arbitrum.io/rpc
-# ARBISCAN_API_KEY=<api_key_de_arbiscan>
-
-# 2. Cargar el .env
-source .env
-
-# 3. Deploy + verify
-forge script script/DeployNFTCollection.s.sol \
-  --rpc-url $ARBITRUM_RPC \
-  --broadcast \
-  --verify \
-  --etherscan-api-key $ARBISCAN_API_KEY
-```
-
 ### Mintear desde Arbiscan
 
 1. Ir al contrato deployado en [Arbiscan](https://sepolia.arbiscan.io/) (o el explorer de la red usada).

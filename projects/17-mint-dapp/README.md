@@ -70,17 +70,9 @@ writeContract({ address: ADDRESS, abi: ABI, functionName: "mintBAC" });
 
 > Resumen: **ethers** te muestra el mecanismo; **wagmi** te da la ergonomía para una app real. Saber los dos es lo ideal.
 
-## Cómo correrlo
+## Estructura
 
-Cada versión es una app Next.js independiente. Desde su carpeta:
-
-```bash
-cd ethers   # o cd wagmi
-npm install
-npm run dev   # http://localhost:3000
-```
-
-Necesitás **MetaMask** en el navegador. Para un mint real: deployá un contrato con `mintBAC()`, poné su `CONTRACT_ADDRESS` y `CONTRACT_ABI` en `lib/contract.js`, y tené algo de ETH en Arbitrum para el gas.
+Dos apps Next.js independientes (carpetas `ethers/` y `wagmi/`), cada una con la misma funcionalidad resuelta con un stack distinto. Conectan **MetaMask** y mintean con `mintBAC()`; el `CONTRACT_ADDRESS` y el `CONTRACT_ABI` viven en `lib/contract.js`.
 
 ## Aprendizajes
 

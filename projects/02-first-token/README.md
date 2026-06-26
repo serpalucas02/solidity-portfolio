@@ -45,16 +45,6 @@ No define lógica propia más allá del mint inicial — el objetivo es ver cóm
 4. Copiar la dirección del contrato deployado.
 5. En MetaMask: **Import token** → pegar la dirección → aparecen los 1000 tokens en la wallet. 🎉
 
-### Setup local (VS Code)
-
-Para que VS Code resuelva el `import "@openzeppelin/contracts/..."` y no marque rojo:
-
-```bash
-npm install --save-dev @openzeppelin/contracts
-```
-
-> Esto solo afecta a la edición/autocompletado en VS Code. El deploy en Remix sigue funcionando igual porque Remix tiene su propio resolver de npm.
-
 ## Aprendizajes
 
 - **El estándar ERC-20 no es código, es un contrato social**: solo es un set de funciones con firmas acordadas (EIP-20). Cualquier contrato que las implemente "es" un token ERC-20 y va a funcionar con todo el ecosistema.
