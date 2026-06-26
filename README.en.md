@@ -2,18 +2,18 @@
 
 **🌐 Language:** [Español](README.md) · English
 
-> **Smart Contract Developer** · Senior Full Stack Developer
+> **Blockchain Developer** · Senior Full Stack Developer
 > Blockchain portfolio: 21 program projects + 3 standalone full-stack projects, deployed and verified.
 
 ---
 
 ## About me
 
-I'm **Lucas Nahuel Serpa**, a full-stack developer specializing in **smart contracts and Web3**. I come from several years of building production software for the **financial sector** (Santander Río's investments area and the insurer Zurich Santander) and enterprise applications (currently **Senior Full Stack Developer** at TanGo Energy Argentina). That work on critical systems gave me a strong focus on **security, testing and robust code** — which I now bring to on-chain development.
+I'm **Lucas Nahuel Serpa**, a full-stack developer specializing in **blockchain**. I come from several years of building production software for the **financial sector** (Santander Río's investments area and the insurer Zurich Santander) and enterprise applications (currently **Senior Full Stack Developer** at TanGo Energy Argentina). That work on critical systems gave me a strong focus on **security, testing and robust code** — which I now bring to on-chain development.
 
-I completed an **intensive Blockchain development Master's** (Blockchain Accelerator, 100% hands-on), building 25+ DeFi projects. This portfolio gathers **24**: the 21 from the program (from Solidity fundamentals to advanced DeFi) and **3 standalone full-stack projects**, deployed and verified on testnet, each with a live demo. I work with an **auditor's mindset**: 100% test coverage and a vulnerability review before every deploy.
+I completed an **intensive Blockchain development Master's** (Blockchain Accelerator, 100% hands-on), building 25+ DeFi projects. This portfolio gathers **24**: the 21 from the program (from Solidity fundamentals to advanced DeFi) and **3 standalone full-stack projects**, deployed and verified on testnet, each with a live demo. I work with an **auditor's mindset**: thorough, adversarial testing and a vulnerability review before every deploy.
 
-I'm looking to join a **Web3 / smart contracts** team (Spanish-speaking companies; written English is no problem).
+I'm looking to join a **Web3 / Blockchain** team (Spanish-speaking companies; written English is no problem).
 
 📍 Buenos Aires, Argentina · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
 
@@ -21,7 +21,7 @@ I'm looking to join a **Web3 / smart contracts** team (Spanish-speaking companie
 
 ## 🚀 Featured projects
 
-Three **standalone, full-stack** projects (contract + frontend), each with an audited contract, **100% coverage**, deployed and **verified on Sepolia**, plus a live demo.
+Three **standalone, full-stack** projects (contract + frontend), each with an audited contract, **thorough tests**, deployed and **verified on Sepolia**, plus a live demo.
 
 | Project | What it is | Demo | Repo |
 |---------|-----------|------|------|
