@@ -29,7 +29,7 @@ Tres proyectos **propios y fullstack** (contrato + frontend), cada uno con contr
 |----------|--------|------|------|
 | 🌱 **On-Chain Garden** | NFT dinámico **100% on-chain**: una planta que crece al regarla; imagen (SVG) y metadata generadas por el propio contrato (sin IPFS). | [Live](https://onchain-garden.vercel.app) | [GitHub](https://github.com/serpalucas02/onchain-garden) |
 | 💸 **StreamPay** | **Streaming de pagos** ERC-20 en tiempo real (sueldo "por segundo"): create / withdraw / cancel con **pull-settlement** anti-bloqueo. | [Live](https://streampay-project.vercel.app) | [GitHub](https://github.com/serpalucas02/streampay) |
-| 🔁 **MiniSwap** | **AMM** de producto constante (`x·y=k`) hecho desde cero: swap + add/remove liquidity con LP tokens y fee del 0.3%. | [Live](https://miniswap-delta.vercel.app) | [GitHub](https://github.com/serpalucas02/miniswap) |
+| 🔁 **MiniSwap** | **AMM** de producto constante (`x·y=k`) hecho desde cero: swap + add/remove liquidity con LP tokens y fee del 0.3%. | [Live](https://miniswap-project.vercel.app) | [GitHub](https://github.com/serpalucas02/miniswap) |
 
 Stack de los customs: Solidity · Foundry · OpenZeppelin · Next.js · wagmi · viem · TypeScript · Tailwind.
 
