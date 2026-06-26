@@ -65,8 +65,8 @@ forge test -vv
 Salida esperada:
 
 ```
-[PASS] test_HonestWithdrawReturnsOwnDeposit()
-[PASS] test_ReentrancyDrainsTheBank()
+[PASS] testHonestWithdrawReturnsOwnDeposit()
+[PASS] testReentrancyDrainsTheBank()
 ```
 
 El segundo test arma el escenario completo: Alice y Bob depositan 5 ETH cada uno, Eve despliega el `Attacker` con 1 ETH y al terminar `bank.totalBalance() == 0` y `address(attacker).balance == 11 ether`.
