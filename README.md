@@ -4,6 +4,8 @@
 
 > **Blockchain Developer** · Senior Full-Stack Developer
 > Portfolio de desarrollo blockchain: 21 proyectos del programa + 3 proyectos propios fullstack, deployados y verificados.
+>
+> 🌐 **Portfolio web:** https://serpa-blockchain-portfolio.vercel.app
 
 ---
 
@@ -15,7 +17,7 @@ Completé un **Máster intensivo en desarrollo Blockchain** (Blockchain Accelera
 
 Busco sumarme a un equipo de **Web3 / Blockchain**. Abierto a trabajo remoto; me manejo en español e inglés (escrito).
 
-📍 CABA, Buenos Aires, Argentina · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
+📍 CABA, Buenos Aires, Argentina · [Portfolio web](https://serpa-blockchain-portfolio.vercel.app) · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
 
 ---
 
@@ -26,7 +28,7 @@ Tres proyectos **propios y fullstack** (contrato + frontend), cada uno con contr
 | Proyecto | Qué es | Demo | Repo |
 |----------|--------|------|------|
 | 🌱 **On-Chain Garden** | NFT dinámico **100% on-chain**: una planta que crece al regarla; imagen (SVG) y metadata generadas por el propio contrato (sin IPFS). | [Live](https://onchain-garden.vercel.app) | [GitHub](https://github.com/serpalucas02/onchain-garden) |
-| 💸 **StreamPay** | **Streaming de pagos** ERC-20 en tiempo real (sueldo "por segundo"): create / withdraw / cancel con **pull-settlement** anti-bloqueo. | [Live](https://streampay-phi.vercel.app) | [GitHub](https://github.com/serpalucas02/streampay) |
+| 💸 **StreamPay** | **Streaming de pagos** ERC-20 en tiempo real (sueldo "por segundo"): create / withdraw / cancel con **pull-settlement** anti-bloqueo. | [Live](https://streampay-project.vercel.app) | [GitHub](https://github.com/serpalucas02/streampay) |
 | 🔁 **MiniSwap** | **AMM** de producto constante (`x·y=k`) hecho desde cero: swap + add/remove liquidity con LP tokens y fee del 0.3%. | [Live](https://miniswap-delta.vercel.app) | [GitHub](https://github.com/serpalucas02/miniswap) |
 
 Stack de los customs: Solidity · Foundry · OpenZeppelin · Next.js · wagmi · viem · TypeScript · Tailwind.
@@ -69,4 +71,4 @@ Solidity · Foundry · OpenZeppelin · Chainlink · Uniswap V2/V3 · Next.js · 
 
 ## 📫 Contacto
 
-[GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
+[Portfolio web](https://serpa-blockchain-portfolio.vercel.app) · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
