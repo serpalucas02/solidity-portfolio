@@ -13,7 +13,7 @@ I'm **Lucas Nahuel Serpa**, a full-stack developer specializing in **blockchain*
 
 I completed an **intensive Blockchain development Master's** (Blockchain Accelerator, 100% hands-on), building 25+ DeFi projects. This portfolio gathers **24**: the 21 from the program (from Solidity fundamentals to advanced DeFi) and **3 standalone full-stack projects**, deployed and verified on testnet, each with a live demo. I work with an **auditor's mindset**: thorough, adversarial testing and a vulnerability review before every deploy.
 
-I'm looking to join a **Web3 / Blockchain** team (Spanish-speaking companies; written English is no problem).
+I'm looking to join a **Web3 / Blockchain** team. Open to remote work; I'm comfortable in both Spanish and English (written).
 
 📍 Buenos Aires, Argentina · [GitHub](https://github.com/serpalucas02) · [LinkedIn](https://www.linkedin.com/in/lucas-serpaa/) · serpalucas02@gmail.com
 
